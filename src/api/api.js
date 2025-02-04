@@ -2,14 +2,13 @@
 // @ts-nocheck
 import axios from "axios";
 
-const apiLink = 'https://4059-213-230-118-146.ngrok-free.app/api';
+const apiLink = 'https://api.kadyrovmedical.uz/api';
 
-axios.defaults.headers.common["ngrok-skip-browser-warning"] = "69420" // remove when moving to server domain
+
 
 export const getCatalogs = async () => {
     try {
         const res = await axios.get(`${apiLink}/catalogs`);
-        console.log(res)
         return res.data
     } catch (e) {
         console.log(e)

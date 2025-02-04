@@ -11,17 +11,19 @@ import tick from '../assets/icons/tick.svg'
 import {useDispatch, useSelector} from "react-redux";
 import CartStepper from "../Components/CartStepper";
 import {makeOrder} from "../api/api";
-import {addItemToCart} from "../store/cartSlice";
+import {addItemToCart, removeItemFromCart} from "../store/cartSlice";
+import {useTranslation} from "react-i18next";
 
 const Korzina = () => {
     f7ready(() => {
     })
-
+    const {i18n, t} = useTranslation();
     const dispatch = useDispatch();
     const items = useSelector((state) => state.cart.items)
+    const totCost = useSelector((state) => state.cart.totCost)
     const [totalCost, setTotalCost] = useState(0);
     const [quantities, setQuantities] = useState({});
-
+    console.log(totalCost)
     useEffect(() => {
         const totalCost2 = items.reduce((total, item) => {
             return total + (item.cost * item.quantity); // Multiply cost by quantity for each item
@@ -39,6 +41,10 @@ const Korzina = () => {
             return total + (item.cost * item.quantity); // Multiply cost by quantity for each item
         }, 0);
         setTotalCost(totalCost2)
+        if (quantity === 0) {
+            dispatch(removeItemFromCart({id: productId}))
+            return;
+        }
         dispatch(
             addItemToCart({
                 name: items.find((item) => item.id === productId).name,
@@ -65,7 +71,7 @@ const Korzina = () => {
         const order = {
             chat_id: localStorage.getItem('chatID'),
             cart: newItems,
-            total_amount: totalCost,
+            total_amount: `${totalCost}`,
         }
 
         const res = await makeOrder(order);
@@ -87,22 +93,18 @@ const Korzina = () => {
 
     return (
         <Page>
-            <BlockHeader className='font-black ' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>Корзина</BlockHeader>
+            <BlockHeader className='font-black ' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>{t('cart')}</BlockHeader>
             <div className="-mt-8 m-0 flex flex-col h-full">
             <List dividersIos mediaList insetIos strongIos>
             {items.map((item, index) => {
                 let isLastItem = (index === items?.length - 1)
                 return (
-                    <ListItem className={`${isLastItem && 'mb-64'} mt-2`} title={item.name } subtitle={item.dose}>
+                    <ListItem className={`${isLastItem && 'mb-64'} mt-2`} title={item.name } subtitle={item.dose || item.name}>
                         <img
                             slot="media"
-                            style={{
-                                borderRadius: '8px',
-                                objectFit: 'cover'
-                            }}
-                            src={img}
-                            width="90"
-                            height="90"
+                            style={{ borderRadius: '8px' }}
+                            src={item.image}
+                            width="44"
                         />
                         <div slot='after'>
                             <img
@@ -111,7 +113,7 @@ const Korzina = () => {
                         </div>
 
                         <div className='max-[330px]:flex-col gap-1 flex flex-row items-center justify-between'>
-                            <p className='whitespace-nowrap font-bold text-sm'>{item.cost} UZS</p>
+                            <p className='whitespace-nowrap font-bold text-sm'>{parseInt(item.cost).toLocaleString('fr-FR')} UZS</p>
                             <CartStepper
                                 key={item.id}
                                 productId={item.id}
@@ -133,7 +135,7 @@ const Korzina = () => {
                 backgroundColor: 'white',borderRadius: '15px 15px 0px 0px' }}>
                 <p style={{marginLeft:12, marginRight: 12}} >
                     <p className='flex justify-between font-bold text-lg' style={{marginLeft:12, marginRight: 12}} >
-                        Общая сумма: <span>{totalCost} UZS</span>
+                        {t('total_sum')}: <span>{parseInt(totalCost).toLocaleString('fr-FE')} UZS</span>
                     </p>
                     <Link onClick={placeOrder} className='w-full h-12 text-white'   style={{
 
@@ -150,7 +152,7 @@ const Korzina = () => {
                             />
                         </div>
 
-                        Оформить заказ
+                        {t('make_order')}
                     </Link>
                 </p>
             </div>
@@ -159,15 +161,15 @@ const Korzina = () => {
                 <div style={{marginBottom: 0}} className="toolbar-inner">
                     <Link onClick={() => {f7.views.main.router.navigate("/main_menu")}} tabLink="#tab-1" >
                         <img src={home_inactive}/>
-                        <span className="tabbar-label">Главная</span>
+                        <span className="tabbar-label">{t('main_menu')}</span>
                     </Link>
                     <Link tabLinkActive  tabLink="#tab-2">
                         <img src={cart_active}/>
-                        <span className="tabbar-label">Корзина</span>
+                        <span className="tabbar-label">{t('cart')}</span>
                     </Link>
                     <Link onClick={() => {f7.views.main.router.navigate("/favourites");}}   tabLink="#tab-3">
                         <img src={heart_gray}/>
-                        <span className="tabbar-label">Избранное</span>
+                        <span className="tabbar-label">{t('favs')}</span>
                     </Link>
                 </div>
             </div>

@@ -9,17 +9,20 @@ import heart_active from "../assets/icons/heart_active.svg";
 import home_inactive from "../assets/icons/home_inactive.svg";
 import {useSelector} from "react-redux";
 import HeartButton from "../Components/HeartButton";
+import {useTranslation} from "react-i18next";
 
 const Favourites = () => {
+    const {i18n, t} = useTranslation();
     const favourites = useSelector((state) => state.favourites);
     console.log(favourites)
     return (
         <Page>
 
-            <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>Избранное</BlockHeader>
+            <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>{t('favs')}</BlockHeader>
             <Block style={{marginTop: '20px'}} className={`grid grid-cols-2 gap-y-2.5 gap-x-2.5 p-0`}>
                 {favourites.map((product, index) => {
                     let isLastItem = (index === favourites.length - 1)
+                    console.log(product)
                     return (
                         <div>
 
@@ -34,9 +37,9 @@ const Favourites = () => {
                                 <div
                                     style={{
                                         backgroundSize: 'cover',
-                                        backgroundPosition: 'left center',
-                                        height: 115,
-                                        backgroundImage: `url(${img})`,
+                                        backgroundPosition: 'bottom center',
+                                        height: 150,
+                                        backgroundImage: `url(${product?.images && product?.images[0]?.detailUrl})`,
                                     }}
                                     className="rounded-t-xl w-full"
                                 >
@@ -58,15 +61,15 @@ const Favourites = () => {
                 <div style={{marginBottom: 0}} className="toolbar-inner">
                     <Link onClick={() => {f7.views.main.router.navigate("/main_menu")}} tabLink="#tab-1" >
                         <img src={home_inactive}/>
-                        <span className="tabbar-label">Главная</span>
+                        <span className="tabbar-label">{t('main_menu')}</span>
                     </Link>
                     <Link onClick={() => {f7.views.main.router.navigate("/cart")}} tabLink="#tab-2">
                         <img src={korzina}/>
-                        <span className="tabbar-label">Корзина</span>
+                        <span className="tabbar-label">{t('cart')}</span>
                     </Link>
                     <Link tabLinkActive tabLink="#tab-3">
                         <img src={heart_active}/>
-                        <span className="tabbar-label">Избранное</span>
+                        <span className="tabbar-label">{t('favs')}</span>
                     </Link>
                 </div>
             </div>

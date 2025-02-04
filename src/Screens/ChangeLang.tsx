@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React, {useEffect, useState} from 'react';
 import {BlockFooter, BlockHeader, f7, List, ListItem, Page} from "framework7-react";
 import {useTranslation} from "react-i18next";
@@ -6,10 +8,10 @@ const ChangeLang = () => {
     const {i18n, t} = useTranslation();
     const [language, setLanguage] = useState(i18n.language)
     const handleBackBtn = () => {
-        f7.views.main.router.navigate("/startup")
+        f7.views.main.router.navigate("/start")
     }
     const handleMainBtn = () => {
-        f7.views.main.router.navigate("/startup")
+        f7.views.main.router.navigate("/start")
     }
     const changeLang = (selectedLanguage) => {
 

@@ -30,6 +30,7 @@ const favouritesSlice = createSlice({
         addFavourite: (state, action) => {
             if (!state.some((item) => item.ID === action.payload.ID)) {
                 state.push(action.payload);
+                console.log(state)
             }
         },
         removeFavourite: (state, action) => {

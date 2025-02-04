@@ -24,20 +24,19 @@ const Start = () => {
 
     const handleMainBtn = () => {
         const initData = Telegram.WebApp.initDataUnsafe;
-        console.log(initData);
         window.Telegram.WebApp.MainButton.showProgress((leave = true) => {})
         window.Telegram.WebApp.offEvent('mainButtonClicked', handleMainBtn);
         f7.views.main.router.navigate('/register');
         window.Telegram.WebApp.MainButton.hideProgress()
     }
     useEffect(() => {
-        const initData = Telegram.WebApp.initDataUnsafe;
+        const initData = window.Telegram.WebApp.initDataUnsafe;
         localStorage.setItem('chatID', initData?.user?.id);
     }, []);
 
 
     useEffect( () => {
-        window.Telegram.WebApp.MainButton.text = "ПРОДОЛЖИТЬ";
+        window.Telegram.WebApp.MainButton.text = t('continueBtn');
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
@@ -52,11 +51,11 @@ const Start = () => {
     return (
         <Page  >
 
-            <div className='flex flex-col items-center justify-center h-screen'>
+            <div className='flex flex-col items-center justify-center h-screen overflow-y-auto'>
 
 
-            <p className='text-center font-black' style={{margin: 0, fontSize: 30, lineHeight: 1.1}}>Добро пожаловать!</p>
-            <p className='text-center px-4 pb-8'>Наш маркетплейс — ваш надежный помощник в мире медицинских товаров.</p>
+            <p className='text-center font-black' style={{margin: 0, fontSize: 30, lineHeight: 1.1}}>{t('welcome')}</p>
+            <p className='text-center px-4 pb-8'>{t('welcome_p')}</p>
             <div>
 
 
@@ -75,10 +74,9 @@ const Start = () => {
 
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold">Удобный интерфейс</h2>
+                        <h2 className="text-lg font-bold">{t('comf_interface')}</h2>
                         <p className='mt-1'>
-                            Удобный интерфейс нашего маркетплейса делает поиск медицинских
-                            товаров быстрым и простым, как никогда!
+                            {t('comf_interface_p')}
                         </p>
                     </div>
                 </div>
@@ -102,9 +100,9 @@ const Start = () => {
 
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold">Большой выбор</h2>
+                        <h2 className="text-lg font-bold">{t('large_choice')}</h2>
                         <p className='mt-1'>
-                            Большой ассортимент медицинских товаров на нашем маркетплейсе
+                            {t('large_choice_p')}
                         </p>
                     </div>
                 </div>
@@ -125,9 +123,9 @@ const Start = () => {
 
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold">Быстрое оформление</h2>
+                        <h2 className="text-lg font-bold">{t('quick_order')}</h2>
                         <p className='mt-1'>
-                            Оформляйте заказы быстро и легко — на нашем маркетплейсе всё сделано для вашего удобства!
+                            {t('quick_order_p')}
                         </p>
                     </div>
                 </div>
@@ -135,8 +133,9 @@ const Start = () => {
             </div>
                 <Button onClick={() => f7.views.main.router.navigate('/change_lang', {
                     reloadAll: true,
-                })} large style={{width: '80%',  margin: '20px auto'}}>ВЫБРАТЬ ЯЗЫК</Button>
+                })} large >{t('choose_lang')}</Button>
             </div>
+
 
         </Page>
     );

@@ -3,8 +3,11 @@
 import {useCallback, useEffect, useReducer} from 'react';
 import {BlockFooter, BlockHeader, f7, List, ListInput, Page} from "framework7-react";
 import {register} from "../api/api";
+import {useTranslation} from "react-i18next";
 
 const LegalRegister = () => {
+    const {i18n, t} = useTranslation()
+
 
     const initialState = {
         name: JSON.parse(localStorage.getItem('register')).name || '',
@@ -46,7 +49,7 @@ const LegalRegister = () => {
     useEffect(() => {
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
-        window.Telegram.WebApp.MainButton.text = "ДАЛЬШЕ";
+        window.Telegram.WebApp.MainButton.text = t('continueBtn');;
         window.Telegram.WebApp.BackButton.hide();
     }, []);
 
@@ -71,13 +74,13 @@ const LegalRegister = () => {
 
     const validateForm = () => {
         const errors = {}
-        if (!state.name.trim()) errors.name = 'Введите имя';
-        if (!state.surname.trim()) errors.surname = 'Введите фамилию';
-        if (!state.lastName.trim()) errors.lastName = 'Введите отчество';
-        if (!state.inn.trim()) errors.inn = 'Введите ИНН';
-        if (!state.company.trim()) errors.company = 'Введите компанию';
-        if (!state.role.trim()) errors.role =  'Введите должность';
-        if (Number.isNaN(Number(state.phoneNumber.slice(1))) || state.phoneNumber.length < 13) errors.phoneNumber = "Введите номер телефона";
+        if (!state.name.trim()) errors.name = t('enter_name');
+        if (!state.surname.trim()) errors.surname = t('enter_surname');
+        if (!state.lastName.trim()) errors.lastName = t('enter_last_name');
+        if (!state.inn.trim()) errors.inn = t('enter_inn');
+        if (!state.company.trim()) errors.company = t('enter_company');
+        if (!state.role.trim()) errors.role =  t('position');
+        if (Number.isNaN(Number(state.phoneNumber.slice(1))) || state.phoneNumber.length < 13) errors.phoneNumber = t('enter_phone_number');
 
         console.log(errors)
         localDispatch({type: 'setErrors', payload: errors});
@@ -134,7 +137,7 @@ const LegalRegister = () => {
             window.Telegram.WebApp.MainButton.isVisible = false;
             window.Telegram.WebApp.BackButton.hide();
         }}>
-            <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>Регистрация Юр. лица</BlockHeader>
+            <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>{t('legal_entity_register')}</BlockHeader>
             <List strongIos dividersIos insetIos>
                 <ListInput
                     maxlength={15}
@@ -144,7 +147,7 @@ const LegalRegister = () => {
                     onChange={handleChange}
                     errorMessageForce={state.errors.name}
                     errorMessage={state.errors.name}
-                    placeholder="Имя"
+                    placeholder={t('name')}
                 />
                 <ListInput
                     maxlength={15}
@@ -155,7 +158,7 @@ const LegalRegister = () => {
                     errorMessageForce={state.errors.surname}
                     errorMessage={state.errors.surname}
 
-                    placeholder="Фамилия"
+                    placeholder={t('surname')}
                 />
                 <ListInput
                     maxlength={15}
@@ -164,11 +167,11 @@ const LegalRegister = () => {
                     onChange={handleChange}
                     errorMessageForce={state.errors.lastName}
                     errorMessage={state.errors.lastName}
-                    placeholder="Отчество"
+                    placeholder={t('last_name')}
                     value={state.lastName}
                 />
             </List>
-            <BlockFooter>Укажите ваше ФИО</BlockFooter>
+            <BlockFooter>{t('enter_full_name')}</BlockFooter>
             <List strongIos dividersIos insetIos>
                 <ListInput
                     errorMessageForce={state.errors.phoneNumber}
@@ -182,7 +185,7 @@ const LegalRegister = () => {
                     onChange={handlePhoneNumberChange}
                 />
             </List>
-            <BlockFooter>Укажите ваш номер телефона</BlockFooter>
+            <BlockFooter>{t('enter_phone_number')}</BlockFooter>
             <List strongIos dividersIos insetIos>
                 <ListInput
                     maxlength={15}
@@ -191,10 +194,10 @@ const LegalRegister = () => {
                     onChange={handleChange}
                     errorMessageForce={state.errors.inn}
                     errorMessage={state.errors.inn}
-                    placeholder="ИНН"
+                    placeholder={t('inn')}
                 />
             </List>
-            <BlockFooter>Ваш ИНН</BlockFooter>
+            <BlockFooter>{t('enter_inn')}</BlockFooter>
             <List strongIos dividersIos insetIos>
                 <ListInput
                     maxlength={15}
@@ -203,10 +206,10 @@ const LegalRegister = () => {
                     onChange={handleChange}
                     errorMessageForce={state.errors.company}
                     errorMessage={state.errors.company}
-                    placeholder="Компания"
+                    placeholder={t('company')}
                 />
             </List>
-            <BlockFooter>Ваша компания</BlockFooter>
+            <BlockFooter>{t('enter_company')}</BlockFooter>
             <List strongIos dividersIos insetIos>
                 <ListInput
                     maxlength={15}
@@ -215,10 +218,10 @@ const LegalRegister = () => {
                     onChange={handleChange}
                     errorMessageForce={state.errors.role}
                     errorMessage={state.errors.role}
-                    placeholder="Должность"
+                    placeholder={t('pos')}
                 />
             </List>
-            <BlockFooter>Ваша должность</BlockFooter>
+            <BlockFooter>{t('position')}</BlockFooter>
         </Page>
     );
 };

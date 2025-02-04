@@ -6,6 +6,9 @@ import {checkAuth} from "../api/api";
 
 const InitPage = () => {
     useEffect(() => {
+        const initData = window.Telegram.WebApp.initDataUnsafe;
+        localStorage.setItem('chatID', initData?.user?.id);
+        window.Telegram.WebApp.expand()
         const res = checkAuth(localStorage.getItem('chatID')).then((data) =>
 
             {
@@ -15,7 +18,7 @@ const InitPage = () => {
                     f7.views.main.router.navigate("/wait_page", {
                         reloadAll: true,
                     })
-                } else if (data?.user?.status === 'accepted') {
+                } else if (data?.user?.status === 'approved') {
                     f7.views.main.router.navigate("/main_menu", {
                         reloadAll: true,
                     })

@@ -33,10 +33,17 @@ function MyApp() {
             {
                 path: '/start',
                 component: Start,
+                options: {
+                    animate: false,
+                    clearPreviousHistory: true
+                }
             },
             {
                 path: '/register',
                 component: Register,
+                options: {
+                    clearPreviousHistory: true
+                }
             },
             {
                 path: '/legal_register',
@@ -81,13 +88,16 @@ function MyApp() {
             {
                 path: '/change_lang',
                 component:ChangeLang,
+                options: {
+                    clearPreviousHistory: true
+                }
             },
         ],
 
     };
     return (
         <App theme="ios" name="My App" {...f7params}>
-                <View transition='f7-fade' id="main-view" main url="/start" />
+                <View transition='f7-fade' id="main-view" main url="/init_page" />
         </App>
     );
 }

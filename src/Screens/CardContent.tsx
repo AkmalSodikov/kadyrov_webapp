@@ -19,6 +19,7 @@ import MyStepper from "../Components/MyStepper";
 import {useDispatch, useSelector} from "react-redux";
 import { addItemToCart } from '../store/cartSlice.js';
 import {getProductById} from "../api/api";
+import {useTranslation} from "react-i18next";
 
 
 const CardContent = (props) => {
@@ -26,6 +27,8 @@ const CardContent = (props) => {
     f7ready(() => {
     })
 
+
+    const {i18n, t} = useTranslation()
     const favourites = useSelector((state) => state.favourites);
     const dispatch = useDispatch();
 
@@ -71,12 +74,12 @@ const CardContent = (props) => {
                         dispatch(
                             addItemToCart({
                                 limit: product.quantity,
+                                image: curProduct?.images[0]?.detailUrl || null,
                                 name: product.name,
                                 id: product.id,
                                 quantity: steppers[product.id],
                                 cost: product.price,
                                 dose: product.size,
-                                totalCost: 0,
                             })
                         );
                     }
@@ -88,9 +91,9 @@ const CardContent = (props) => {
                         name: curProduct.name,
                         id: curProduct.id,
                         quantity: 1,
+                        image: curProduct?.images[0]?.detailUrl || null,
                         cost: curProduct.price,
                         dose: curProduct.size,
-                        totalCost: 0,
                     })
                 );
             }
@@ -107,7 +110,7 @@ const CardContent = (props) => {
             setCurProduct(res)
 
             const initialSteppers = res?.variations?.reduce((acc, variation) => {
-                acc[variation.id] = 0; // Set initial value as 0 for each variation ID
+                acc[variation.id] = 0;
                 return acc;
             }, {});
 
@@ -170,11 +173,12 @@ const CardContent = (props) => {
                                 <swiper-slide>
                                     <div className="cards-ctn" style={{
                                         display: 'flex',
+                                        height:400,
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',
-                                        backgroundImage: `url(${image?.showUrl})`,
+                                        backgroundImage: `url(${image?.detailUrl})`,
                                         backgroundSize: 'cover',
-                                        backgroundPosition: 'center',
+                                        backgroundPosition: 'bottom center',
                                     }}>
                                     </div>
                                 </swiper-slide>
@@ -186,9 +190,6 @@ const CardContent = (props) => {
                     <div className='py-1' style={{ borderRadius: '0px 0px 15px 15px'}}>
                         <BlockTitle style={{marginTop: 15, fontSize: 20,lineHeight: 1.2, fontWeight: 'bold' }}>{curProduct?.name}</BlockTitle>
                         <p className='ml-4 mt-0 p-0'>{category}</p>
-                        <BlockTitle className='items-center' style={{padding: 0,fontSize: 20, fontWeight: 'bold'}}>
-                            Описание
-                        </BlockTitle>
 
                         <BlockFooter className='text-md' style={{
                             color: 'black',
@@ -239,7 +240,7 @@ const CardContent = (props) => {
                                 </svg>
                             </div>
 
-                            Добавить в корзину
+                            {t('add_to_cart')}
                         </Link>
                     </p>
                 </div>

@@ -23,13 +23,16 @@ import korzina from '../assets/icons/korzina.svg'
 import HeartButton from "../Components/HeartButton";
 import {getCatalogs, getProductById, getProducts, register} from '../api/api.js'
 import {useSelector} from "react-redux";
+import {useTranslation} from "react-i18next";
 
 
 const MainMenu = () => {
     f7ready(() => {
 
     })
-
+    const {i18n, t} = useTranslation();
+    const [language, setLanguage] = useState(i18n.language)
+    const [searchQuery, setSearchQuery] = useState('')
     const favourites = useSelector((state) => state.favourites);
     const [img, setImg] = useState('');
     const [activeTab, setActiveTab] = useState(0);
@@ -37,6 +40,13 @@ const MainMenu = () => {
     const [categoryId, setCategoryId] = useState({id: categories[0]?.id, name: categories[0]?.name});
     const [products, setProducts] = useState([])
     const [isProductLoading, setIsProductLoading] = useState(false)
+
+
+
+    const changeLang = (selectedLanguage) => {
+        setLanguage(selectedLanguage);
+        i18n.changeLanguage(selectedLanguage);
+    }
 
     useEffect(() => {
         window.Telegram.WebApp.MainButton.isVisible = false;
@@ -71,18 +81,7 @@ const MainMenu = () => {
         console.log(img)
     }, [img])
 
-    const [searchQuery, setSearchQuery] = useState('')
 
-
-    /*if (categories.length === 0) {
-        return (
-            <Page>
-                <div className='flex items-center h-screen justify-center'>
-                    <Preloader color='#1A8C03'/>
-                </div>
-            </Page>
-        )
-    }*/
     return (
         <Page>
                 <div style={{marginTop: 15}} className="custom-searchbar-container">
@@ -94,7 +93,7 @@ const MainMenu = () => {
                                 '--f7-searchbar-search-icon-color': '#1A8C03'
                             }}
                             className="custom-searchbar"
-                            placeholder={'Поиск'}
+                            placeholder={t('search')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             searchContainer=".search-list"
@@ -111,10 +110,10 @@ const MainMenu = () => {
                         </div>
                     </Link>
                     <Popover arrow  className="language-popover">
-                        <h1 className="pl-4 pt-1 font-bold">Язык</h1>
+                        <h1 className="pl-4 pt-1 font-bold">{t('interfaceLang')}</h1>
                         <List inset dividersIos>
-                            <ListItem  radio radioIcon="end" title="Русский 🇷🇺" value="ru" name="demo-radio-end" />
-                            <ListItem  radio radioIcon="end" title="O'zbekcha 🇺🇿" value="uz" name="demo-radio-end" />
+                            <ListItem onChange={() => changeLang('ru')} checked={language === "ru"}  radio radioIcon="end" title="Русский 🇷🇺" value="ru" name="demo-radio-end" />
+                            <ListItem onChange={() => changeLang('uz')} checked={language === "uz"} radio radioIcon="end" title="O'zbekcha 🇺🇿" value="uz" name="demo-radio-end" />
                         </List>
                     </Popover>
             </div>
@@ -164,11 +163,11 @@ const MainMenu = () => {
                             <div
                                 style={{
                                     backgroundSize: 'cover',
-                                    backgroundPosition: 'left center',
-                                    height: 115,
-                                    backgroundImage: `url(https://kadyrovmedical.bitrix24.kz/bitrix/components/bitrix/crm.product.file/download.php?productId=77&fieldName=PROPERTY_45&dynamic=Y&fileId=1509)`,
+                                    backgroundPosition: 'bottom center',
+                                    height: 150,
+                                    backgroundImage: `url(${product?.images[0]?.detailUrl})`,
                                 }}
-                                className="rounded-t-xl w-full"
+                                className=" rounded-t-xl w-full"
                             >
                             </div>
                             <p className="text-[14px] pl-2 mt-2 font-bold overflow-hidden whitespace-nowrap text-ellipsis">{product?.NAME}</p>
@@ -189,15 +188,15 @@ const MainMenu = () => {
                 <div style={{marginBottom: 0}} className="toolbar-inner">
                     <Link tabLinkActive tabLink="#tab-1" >
                         <img src={home}/>
-                        <span className="tabbar-label">Главная</span>
+                        <span className="tabbar-label">{t('main_menu')}</span>
                     </Link>
                     <Link onClick={() => {f7.views.main.router.navigate("/cart")}} tabLink="#tab-2">
                         <img src={korzina}/>
-                        <span className="tabbar-label">Корзина</span>
+                        <span className="tabbar-label">{t('cart')}</span>
                     </Link>
                     <Link onClick={() => {f7.views.main.router.navigate("/favourites");}}   tabLink="#tab-3">
                         <img src={heart_gray}/>
-                        <span className="tabbar-label">Избранное</span>
+                        <span className="tabbar-label">{t('favs')}</span>
                     </Link>
                 </div>
             </div>
