@@ -16,7 +16,6 @@ import {
     Preloader,
     Searchbar
 } from "framework7-react";
-import img from '../assets/img.png'
 import home from '../assets/icons/home.svg'
 import heart_gray from '../assets/icons/heart_gray.svg'
 import korzina from '../assets/icons/korzina.svg'
@@ -24,7 +23,7 @@ import HeartButton from "../Components/HeartButton";
 import {getCatalogs, getProductById, getProducts, register} from '../api/api.js'
 import {useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
-
+import image from '../assets/empty_img.jpg'
 
 const MainMenu = () => {
     f7ready(() => {
@@ -165,7 +164,7 @@ const MainMenu = () => {
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'bottom center',
                                     height: 150,
-                                    backgroundImage: `url(${product?.images[0]?.detailUrl})`,
+                                    backgroundImage: `url(${product?.images?.length > 0 ? product?.images[0]?.detailUrl.replace(/ /g, "%20") : image})`,
                                 }}
                                 className=" rounded-t-xl w-full"
                             >

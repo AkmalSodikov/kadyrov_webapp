@@ -14,7 +14,7 @@ import {
     Preloader,
     Stepper
 } from "framework7-react";
-import img from '../assets/img.png'
+import img from '../assets/empty_img.jpg'
 import MyStepper from "../Components/MyStepper";
 import {useDispatch, useSelector} from "react-redux";
 import { addItemToCart } from '../store/cartSlice.js';
@@ -110,7 +110,7 @@ const CardContent = (props) => {
             setCurProduct(res)
 
             const initialSteppers = res?.variations?.reduce((acc, variation) => {
-                acc[variation.id] = 0;
+                acc[variation.id] = 0; // Set initial value as 0 for each variation ID
                 return acc;
             }, {});
 
@@ -167,8 +167,8 @@ const CardContent = (props) => {
                             "--swiper-pagination-bullet-size": "10px",
                             "--swiper-pagination-bullet-active-scale": "1.2"
                         }} pagination className="demo-swiper-multiple" space-between="0">
-                            {curProduct?.images?.map(image => {
-                                console.log(image)
+                            {curProduct?.images.length > 0 ? curProduct?.images?.map(image => {
+
                                 return (
                                 <swiper-slide>
                                     <div className="cards-ctn" style={{
@@ -176,13 +176,26 @@ const CardContent = (props) => {
                                         height:400,
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',
-                                        backgroundImage: `url(${image?.detailUrl})`,
+                                        backgroundImage: `url(${image?.detailUrl.replace(/ /g, "%20")})`,
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'bottom center',
                                     }}>
                                     </div>
                                 </swiper-slide>
-                            )})}
+                            )}) :
+                                <swiper-slide>
+                                <div className="cards-ctn" style={{
+                                display: 'flex',
+                                height:400,
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                backgroundImage: `url(${img})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'bottom center',
+                            }}>
+                            </div>
+                                    </swiper-slide>
+                                }
                         </swiper-container>
                     </div>
                     <HeartButton combStyle={`z-[999999] absolute shadow-xl overflow-hidden right-2 top-2 w-[35px] h-[35px]`} car={product}  isFav={favourites?.some((fav) => fav.id === product.id)}/>
@@ -190,6 +203,9 @@ const CardContent = (props) => {
                     <div className='py-1' style={{ borderRadius: '0px 0px 15px 15px'}}>
                         <BlockTitle style={{marginTop: 15, fontSize: 20,lineHeight: 1.2, fontWeight: 'bold' }}>{curProduct?.name}</BlockTitle>
                         <p className='ml-4 mt-0 p-0'>{category}</p>
+                        <BlockTitle className='items-center' style={{padding: 0,fontSize: 20, fontWeight: 'bold'}}>
+                            Описание
+                        </BlockTitle>
 
                         <BlockFooter className='text-md' style={{
                             color: 'black',
@@ -197,7 +213,7 @@ const CardContent = (props) => {
                             whiteSpace: 'normal',
                             wordWrap: 'break-word',
                             marginBottom: 0,
-                        }}>{curProduct?.description_uz}</BlockFooter>
+                        }}>{curProduct?.description_uz?.value || "Не указано"}</BlockFooter>
                     </div>
                 {curProduct?.variations && curProduct.variations.map((item) => {
                     return (
