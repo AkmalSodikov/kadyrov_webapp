@@ -107,10 +107,9 @@ const Korzina = () => {
         const totalCost2 = items.reduce((total, item) => {
             return total + (item.cost * item.quantity);
         }, 0);
-        console.log(totalCost2);  // You can log it to verify
-        setTotalCost(totalCost2);  // Update the total cost state
+        setTotalCost(totalCost2);
         setTimeout(() => {
-            setIsLoading(false);  // Hide loader after a set amount of time
+            setIsLoading(false);
         }, 500);
     }, [items]);
 
