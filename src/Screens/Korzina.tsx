@@ -1,7 +1,19 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import  {useEffect, useState} from 'react';
-import {BlockHeader, BlockTitle, Button, f7, f7ready, Icon, Link, List, ListItem, Page} from "framework7-react";
+import {
+    BlockHeader,
+    BlockTitle,
+    Button,
+    f7,
+    f7ready,
+    Icon,
+    Link,
+    List,
+    ListItem,
+    Page,
+    Preloader
+} from "framework7-react";
 import img from "../assets/img.png";
 import heart_gray from "../assets/icons/heart_gray.svg";
 import home_inactive from "../assets/icons/home_inactive.svg";
@@ -18,6 +30,7 @@ const Korzina = () => {
     f7ready(() => {
     })
     const {i18n, t} = useTranslation();
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
     const items = useSelector((state) => state.cart.items)
     const totCost = useSelector((state) => state.cart.totCost)
@@ -85,6 +98,30 @@ const Korzina = () => {
     }
 
 
+    const removeItem = (productId) => {
+        setIsLoading(true);
+        dispatch(removeItemFromCart({id: productId}));
+    }
+
+    useEffect(() => {
+        const totalCost2 = items.reduce((total, item) => {
+            return total + (item.cost * item.quantity);
+        }, 0);
+        console.log(totalCost2);  // You can log it to verify
+        setTotalCost(totalCost2);  // Update the total cost state
+        setTimeout(() => {
+            setIsLoading(false);  // Hide loader after a set amount of time
+        }, 500);
+    }, [items]);
+
+    if (isLoading) {
+        return (
+            <div className='flex h-screen items-center justify-center'>
+                <Preloader color='#1A8C03'/>
+            </div>
+        )
+    }
+
 
 
 
@@ -106,7 +143,7 @@ const Korzina = () => {
                             src={item.image}
                             width="44"
                         />
-                        <div onClick={() => dispatch(removeItemFromCart({id: item.id}))} slot='after'>
+                        <div onClick={() => removeItem(item.id)} slot='after'>
                             <Icon f7="trash" size="25px" style={{color: "red"}}></Icon>
                         </div>
 
