@@ -16,7 +16,7 @@ import LegalRegister from "./Screens/LegalRegister";
 import OrderPlaced from "./Screens/OrderPlaced";
 import ChangeLang from "./Screens/ChangeLang";
 
-eruda.init()
+//eruda.init()
 
 function MyApp() {
 
