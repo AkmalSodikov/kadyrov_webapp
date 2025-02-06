@@ -9,6 +9,7 @@ const apiLink = 'https://api.kadyrovmedical.uz/api';
 export const getCatalogs = async () => {
     try {
         const res = await axios.get(`${apiLink}/catalogs`);
+        console.log(res)
         return res.data
     } catch (e) {
         console.log(e)
