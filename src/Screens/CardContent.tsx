@@ -53,7 +53,8 @@ const CardContent = (props) => {
     const increment = (id, quantity) => {
         setSteppers((prev) => ({
             ...prev,
-            [id]: prev[id] < quantity ?  prev[id] + 1 : prev[id],
+            //[id]: prev[id] < quantity ?  prev[id] + 1 : prev[id],
+            [id]: prev[id] + 1,
         }));
         window.Telegram.WebApp.HapticFeedback.impactOccurred('rigid')
     };
@@ -73,7 +74,7 @@ const CardContent = (props) => {
                     if (steppers[product.id] > 0) {
                         dispatch(
                             addItemToCart({
-                                limit: product.quantity,
+                                //limit: product.quantity,
                                 image: curProduct?.images[0]?.detailUrl || null,
                                 name: product.name,
                                 id: product.id,
@@ -87,7 +88,7 @@ const CardContent = (props) => {
             } else {
                 dispatch(
                     addItemToCart({
-                        limit: 1,
+                        //limit: 1,
                         name: curProduct.name,
                         id: curProduct.id,
                         quantity: 1,

@@ -3,10 +3,13 @@
 import React, {useEffect} from 'react';
 import {f7, Page, Preloader} from "framework7-react";
 import {checkAuth} from "../api/api";
+import {useTranslation} from "react-i18next";
 
 const InitPage = () => {
+    const {i18n} = useTranslation();
     useEffect(() => {
         const initData = window.Telegram.WebApp.initDataUnsafe;
+        i18n.changeLanguage(localStorage.getItem('lang'));
         localStorage.setItem('chatID', initData?.user?.id);
         window.Telegram.WebApp.expand()
         const res = checkAuth(localStorage.getItem('chatID')).then((data) =>

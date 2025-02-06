@@ -12,6 +12,7 @@ i18next.use(initReactI18next)
             ru: {
                 translation: {
                     //start:
+                    nothing_found: 'Ничего не найдено',
                     welcome: 'Добро пожаловать!',
                     welcome_p: 'Наш маркетплейс — ваш надежный помощник в мире медицинских товаров.',
                     comf_interface: 'Удобный интерфейс',
@@ -65,6 +66,7 @@ i18next.use(initReactI18next)
             uz: {
                 translation: {
                     //start:
+                    nothing_found: 'Hechnarsa topilmadi',
                     welcome: 'Xush kelibsiz!',
                     welcome_p: 'Bizning marketpleysimiz - bu sizning tibbiy buyumlar dunyosidagi ishonchli yordamchingiz.',
                     comf_interface: 'Qulay interfeys',
@@ -103,7 +105,7 @@ i18next.use(initReactI18next)
                     request_sent_p: 'Ma’lumotlaringizni qayta ishlash uchun so‘rovingiz yuborildi. \n Moderatsiyadan o‘tgach, sizga xabar beriladi va marketpleys foydalanish uchun ochiladi.',
 //main_menu
                     search: 'Qidirish',
-                    main_menu: 'Asosiy menyu',
+                    main_menu: 'Menu',
                     cart: 'Savat',
                     favs: 'Sevimlilar',
                     add_to_cart: 'Savatga qo‘shish',

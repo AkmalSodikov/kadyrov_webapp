@@ -8,7 +8,8 @@ const CartStepper = ({initialQuantity,onQuantityChange, productId, limit}) => {
 
 
     const handleIncrement = () => {
-        const newCount = count < limit ? count + 1 : count;
+        //const newCount = count < limit ? count + 1 : count;
+        const newCount =  count + 1
         setCount(newCount);
         onQuantityChange(productId, newCount);
     };

@@ -32,6 +32,7 @@ const MainMenu = () => {
     const {i18n, t} = useTranslation();
     const [language, setLanguage] = useState(i18n.language)
     const [searchQuery, setSearchQuery] = useState('')
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const favourites = useSelector((state) => state.favourites);
     const [img, setImg] = useState('');
     const [activeTab, setActiveTab] = useState(0);
@@ -45,6 +46,7 @@ const MainMenu = () => {
     const changeLang = (selectedLanguage) => {
         setLanguage(selectedLanguage);
         i18n.changeLanguage(selectedLanguage);
+        localStorage.setItem('lang', i18n.language)
     }
 
     useEffect(() => {
@@ -76,9 +78,14 @@ const MainMenu = () => {
 
 
 
+
+
     useEffect(() => {
-        console.log(img)
-    }, [img])
+        const filteredProducts = products.filter((item) =>
+            item?.NAME.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredProducts(filteredProducts)
+    }, [products, searchQuery])
 
 
     return (
@@ -105,7 +112,7 @@ const MainMenu = () => {
                     </div>
                     <Link popoverOpen=".language-popover">
                         <div className="right-icons">
-                            <span className="flag-icon">{'🇺🇿'}</span>
+                            <span className="flag-icon">{language === 'uz' ? '🇺🇿' : '🇷🇺'}</span>
                         </div>
                     </Link>
                     <Popover arrow  className="language-popover">
@@ -146,7 +153,7 @@ const MainMenu = () => {
             </div>
 
             <Block style={{marginTop: '20px'}} className={`${(products?.length === 0 || isProductLoading) ? 'flex items-center justify-center' : 'grid grid-cols-2 gap-y-2.5 gap-x-2.5 p-0'}`}>
-                {(products?.length === 0 || isProductLoading)  ? <Preloader color='#1A8C03'/> : products?.map((product, index) => {
+                {(products?.length === 0 || isProductLoading)  ? <Preloader color='#1A8C03'/> : (filteredProducts.length === 0 ? <div>{t('nothing_found')}</div> : filteredProducts?.map((product, index) => {
                     let isLastItem = (index === products?.length - 1)
                     return (
                     <div>
@@ -180,7 +187,7 @@ const MainMenu = () => {
                         </div>
                         {isLastItem && (<div className='mb-16'></div>)}
                     </div>
-                )})}
+                )}))}
             </Block>
 
             <div style={{position: 'fixed', paddingBottom:80, '--f7-tabbar-link-active-color': 'green'}} className="toolbar tabbar-icons toolbar-bottom">
