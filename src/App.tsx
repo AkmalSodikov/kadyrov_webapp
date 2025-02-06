@@ -16,7 +16,7 @@ import LegalRegister from "./Screens/LegalRegister";
 import OrderPlaced from "./Screens/OrderPlaced";
 import ChangeLang from "./Screens/ChangeLang";
 
-//eruda.init()
+eruda.init()
 
 function MyApp() {
 
@@ -97,7 +97,7 @@ function MyApp() {
     };
     return (
         <App theme="ios" name="My App" {...f7params}>
-                <View transition='f7-fade' id="main-view" main url="/main_menu" />
+                <View transition='f7-fade' id="main-view" main url="/order_placed" />
         </App>
     );
 }
