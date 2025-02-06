@@ -214,20 +214,22 @@ const CardContent = (props) => {
                             whiteSpace: 'normal',
                             wordWrap: 'break-word',
                             marginBottom: 0,
-                        }}>{curProduct?.description_uz?.value || t('no_desc')}</BlockFooter>
+                        }}>{i18n.language === 'uz' ? (curProduct?.description_uz?.value ||  t('no_desc') ) : (curProduct?.description_ru?.value || t('no_desc'))}</BlockFooter>
                     </div>
                 <div className='mt-4 mb-8'>
                     {curProduct?.variations && curProduct.variations.map((item) => {
-                        return (
-                            <MyStepper
-                                key={item?.id}
-                                stepperValue={steppers[item.id]}
-                                onDecrement={() => decrement(item.id)}
-                                onIncrement={() => increment(item.id, item?.quantity)}
-                                cost={item.price}
-                                dose={item.size}
-                            />
-                        )
+                        if (item.price) {
+                            return (
+                                <MyStepper
+                                    key={item?.id}
+                                    stepperValue={steppers[item.id]}
+                                    onDecrement={() => decrement(item.id)}
+                                    onIncrement={() => increment(item.id, item?.quantity)}
+                                    cost={item.price}
+                                    dose={item.size}
+                                />
+                            )
+                        }
                     } )}
                 </div>
 
