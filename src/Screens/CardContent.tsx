@@ -203,9 +203,9 @@ const CardContent = (props) => {
 
                     <div className='py-1' style={{ borderRadius: '0px 0px 15px 15px'}}>
                         <BlockTitle style={{marginTop: 15, fontSize: 20,lineHeight: 1.2, fontWeight: 'bold' }}>{curProduct?.name}</BlockTitle>
-                        <p className='ml-4 mt-0 p-0'>{category}</p>
+                        <p className='text-[17px] ml-4 mt-0 p-0'>{category}</p>
                         <BlockTitle className='items-center' style={{padding: 0,fontSize: 20, fontWeight: 'bold'}}>
-                            Описание
+                            {t('description')}
                         </BlockTitle>
 
                         <BlockFooter className='text-md' style={{
@@ -214,25 +214,27 @@ const CardContent = (props) => {
                             whiteSpace: 'normal',
                             wordWrap: 'break-word',
                             marginBottom: 0,
-                        }}>{curProduct?.description_uz?.value || "Не указано"}</BlockFooter>
+                        }}>{curProduct?.description_uz?.value || t('no_desc')}</BlockFooter>
                     </div>
-                {curProduct?.variations && curProduct.variations.map((item) => {
-                    return (
-                        <MyStepper
-                            key={item?.id}
-                            stepperValue={steppers[item.id]}
-                            onDecrement={() => decrement(item.id)}
-                            onIncrement={() => increment(item.id, item?.quantity)}
-                            cost={item.price}
-                            dose={item.size}
-                        />
-                    )
-                } )}
+                <div className='mt-4 mb-8'>
+                    {curProduct?.variations && curProduct.variations.map((item) => {
+                        return (
+                            <MyStepper
+                                key={item?.id}
+                                stepperValue={steppers[item.id]}
+                                onDecrement={() => decrement(item.id)}
+                                onIncrement={() => increment(item.id, item?.quantity)}
+                                cost={item.price}
+                                dose={item.size}
+                            />
+                        )
+                    } )}
+                </div>
 
 
 
 
-                <div className='mb-24'></div>
+                <div className='mb-36'></div>
 
                 <div className='fixed bottom-0 w-full pb-4'  style={{
 

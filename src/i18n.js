@@ -12,15 +12,17 @@ i18next.use(initReactI18next)
             ru: {
                 translation: {
                     //start:
+                    description: 'Описание',
+                    no_desc: 'Не указано',
                     nothing_found: 'Ничего не найдено',
                     welcome: 'Добро пожаловать!',
-                    welcome_p: 'Наш маркетплейс — ваш надежный помощник в мире медицинских товаров.',
+                    welcome_p: 'Наш маркетплейс — ваш надежный помощник в мире медицинских товаров',
                     comf_interface: 'Удобный интерфейс',
-                    comf_interface_p: 'Удобный интерфейс нашего маркетплейса делает поиск медицинских товаров быстрым и простым, как никогда!',
+                    comf_interface_p: 'Удобный интерфейс нашего маркетплейса делает поиск медицинских товаров быстрым и простым, как никогда',
                     large_choice: 'Большой выбор',
                     large_choice_p: 'Большой ассортимент медицинских товаров на нашем маркетплейсе',
                     quick_order: 'Быстрое оформление',
-                    quick_order_p: ' Оформляйте заказы быстро и легко — на нашем маркетплейсе всё сделано для вашего удобства!',
+                    quick_order_p: ' Оформляйте заказы быстро и легко — на нашем маркетплейсе всё сделано для вашего удобства',
                     choose_lang: 'ВЫБРАТЬ ЯЗЫК',
                     continueBtn: 'ПРОДОЛЖИТЬ',
                     // change lang:
@@ -39,11 +41,11 @@ i18next.use(initReactI18next)
                     legal_entity: 'Юридическое лицо',
                     legal_entity_register: 'Регистрация Юр. лица',
                     inn: "ИНН",
-                    enter_inn: 'Ваш ИНН',
+                    enter_inn: 'Укажите ИНН вашей компании',
                     company: 'Компания',
                     pos: 'Должность',
-                    enter_company: 'Ваша компания',
-                    position: 'Ваша должность',
+                    enter_company: 'Укажите название вашей компании',
+                    position: 'Укажите должность в вашей компании',
                     // wait page
                     request_sent: 'Запрос отправлен!',
                     request_sent_p: 'Ваш запрос на обработку данных отправлен. \n После прохождения модерации вы получите уведомление, и маркетплейс станет доступен.',
@@ -66,15 +68,17 @@ i18next.use(initReactI18next)
             uz: {
                 translation: {
                     //start:
+                    description: "Batafsil ma'lumot",
+                    no_desc: 'Ma\'lumot yoq',
                     nothing_found: 'Hechnarsa topilmadi',
                     welcome: 'Xush kelibsiz!',
-                    welcome_p: 'Bizning marketpleysimiz - bu sizning tibbiy buyumlar dunyosidagi ishonchli yordamchingiz.',
-                    comf_interface: 'Qulay interfeys',
-                    comf_interface_p: 'Bizning marketpleysimizning qulay interfeysi tibbiy buyumlarni qidirishni hech qachon bo‘lmagandek tez va oson qiladi!',
+                    welcome_p: 'Bizning marketplace — tibbiy mahsulotlar dunyosidagi ishonchli yordamchingiz',
+                    comf_interface: 'Qulay va oson interfeys',
+                    comf_interface_p: 'Bizning marketplace’ning qulay interfeysi bilan tibbiy mahsulot topish bunchalik tez va oson bo‘lmagan',
                     large_choice: 'Katta tanlov',
-                    large_choice_p: 'Bizning marketpleysimizda tibbiy buyumlarning katta assortimenti',
+                    large_choice_p: 'Bizning marketplace’da tibbiy mahsulotlarning ulkan tanlovi',
                     quick_order: 'Tez buyurtma',
-                    quick_order_p: 'Buyurtmalarni tez va oson rasmiylashtiring - bizning marketpleysimizda hamma narsa sizning qulayligingiz uchun qilingan!',
+                    quick_order_p: 'Buyurtma berish tez va oson! Bizning marketplace sizning qulayligingiz uchun yaratilgan',
                     choose_lang: 'TILNI TANLANG',
                     continueBtn: 'DAVOM ETISH',
 // change lang:
@@ -89,20 +93,20 @@ i18next.use(initReactI18next)
 
 
                     surname: 'Familiya',
-                    last_name: 'Otasining ismi',
+                    last_name: 'Otangizning ismi',
                     enter_full_name: 'To‘liq ismingizni kiriting',
                     enter_phone_number: 'Telefon raqamingizni kiriting',
                     legal_entity: 'Yuridik shaxs',
                     legal_entity_register: 'Yuridik shaxsni ro‘yxatdan o‘tkazish',
-                    inn: "STIR",
-                    enter_inn: 'STIRingizni kiriting',
+                    inn: "STIR(INN)",
+                    enter_inn: 'Kompaniyangizning STIR(INN) raqamini kiriting',
                     company: 'Kompaniya',
-                    enter_company: 'Kompaniyangizni kiriting',
+                    enter_company: 'Kompaniyangizning nomini kiriting',
                     pos: 'Lavozim',
-                    position: 'Lavozimingiz',
+                    position: 'Kompaniyadagi lavozimingizni kiriting',
 // wait page
                     request_sent: 'So‘rov yuborildi!',
-                    request_sent_p: 'Ma’lumotlaringizni qayta ishlash uchun so‘rovingiz yuborildi. \n Moderatsiyadan o‘tgach, sizga xabar beriladi va marketpleys foydalanish uchun ochiladi.',
+                    request_sent_p: 'Ma’lumotlaringizni qayta ishlash uchun so‘rovingiz yuborildi. \n Moderatsiyadan o‘tgach, sizga xabar beriladi va marketplace foydalanish uchun ochiladi.',
 //main_menu
                     search: 'Qidirish',
                     main_menu: 'Menu',

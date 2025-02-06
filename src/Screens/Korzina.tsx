@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import  {useEffect, useState} from 'react';
-import {BlockHeader, BlockTitle, Button, f7, f7ready, Link, List, ListItem, Page} from "framework7-react";
+import {BlockHeader, BlockTitle, Button, f7, f7ready, Icon, Link, List, ListItem, Page} from "framework7-react";
 import img from "../assets/img.png";
 import heart_gray from "../assets/icons/heart_gray.svg";
 import home_inactive from "../assets/icons/home_inactive.svg";
@@ -106,14 +106,12 @@ const Korzina = () => {
                             src={item.image}
                             width="44"
                         />
-                        <div slot='after'>
-                            <img
-                                src={cart}
-                            />
+                        <div onClick={() => dispatch(removeItemFromCart({id: item.id}))} slot='after'>
+                            <Icon f7="trash" size="25px" style={{color: "red"}}></Icon>
                         </div>
 
-                        <div className='max-[330px]:flex-col gap-1 flex flex-row items-center justify-between'>
-                            <p className='whitespace-nowrap font-bold text-sm'>{parseInt(item.cost).toLocaleString('fr-FR')} UZS</p>
+                        <div className='max-[330px]:flex-col gap-1 flex flex-row items-center justify-between m-0 mt-4'>
+                            <p className='whitespace-nowrap font-bold m-0 text-md'>{parseInt(item.cost).toLocaleString('fr-FR')} <span className='text-[12px]'>UZS</span></p>
                             <CartStepper
                                 key={item.id}
                                 productId={item.id}

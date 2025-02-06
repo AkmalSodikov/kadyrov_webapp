@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Framework7 Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Framework7 Icons'), local('Framework7Icons-Regular'),
+    url('../public/fonts/Framework7Icons-Regular.woff2') format('woff2'), url('../public/fonts/Framework7Icons-Regular.woff')
+    format('woff'), url('../public/fonts/Framework7Icons-Regular.ttf') format('truetype');
+}
+
+
+
+
 .f7-icons,
 .framework7-icons {
     font-family: 'Framework7 Icons';
