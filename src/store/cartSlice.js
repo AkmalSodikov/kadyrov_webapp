@@ -3,10 +3,31 @@
 // cartSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
+
+const loadFromLocalStorage = (key) => {
+    try {
+        const serializedState = localStorage.getItem(key);
+        return serializedState ? JSON.parse(serializedState) : undefined;
+    } catch (e) {
+        console.error('Could not load state from localStorage', e);
+        return undefined;
+    }
+};
+
+const saveToLocalStorage = (key, state) => {
+    try {
+        const serializedState = JSON.stringify(state);
+        localStorage.setItem(key, serializedState);
+    } catch (e) {
+        console.error('Could not save state to localStorage', e);
+    }
+};
+
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-        items: [],
+        items: loadFromLocalStorage('cart') || [],
         totCost: 0,
     },
     reducers: {
@@ -37,5 +58,15 @@ const cartSlice = createSlice({
 });
 
 export const { addItemToCart, removeItemFromCart, clearCart, updateTotalCost } = cartSlice.actions;
+
+export const cartMiddleware = (storeAPI) => (next) => (action) => {
+
+    const result = next(action);
+    if (action.type.startsWith('cart/')) {
+        const state = storeAPI.getState().cart.items;
+        saveToLocalStorage('cart', state);
+    }
+    return result;
+};
 
 export default cartSlice.reducer;

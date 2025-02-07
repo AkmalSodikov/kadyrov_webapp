@@ -97,7 +97,7 @@ function MyApp() {
     };
     return (
         <App theme="ios" name="My App" {...f7params}>
-                <View transition='f7-fade' id="main-view" main url="/init_page" />
+                <View transition='f7-fade' id="main-view" main url="/main_menu" />
         </App>
     );
 }

@@ -30,6 +30,7 @@ const MainMenu = () => {
 
     })
     const {i18n, t} = useTranslation();
+    const vars = t('variations', { returnObjects: true });
     const [language, setLanguage] = useState(i18n.language)
     const [searchQuery, setSearchQuery] = useState('')
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -37,7 +38,7 @@ const MainMenu = () => {
     const [img, setImg] = useState('');
     const [activeTab, setActiveTab] = useState(0);
     const [categories, setCategories] = useState([])
-    const [categoryId, setCategoryId] = useState({id: categories[0]?.id, name: categories[0]?.name});
+    const [categoryId, setCategoryId] = useState({id: categories[0]?.id, name: i18n.language === 'ru' ? categories[0].name : vars[0]});
     const [products, setProducts] = useState([])
     const [isProductLoading, setIsProductLoading] = useState(false)
 
@@ -57,7 +58,7 @@ const MainMenu = () => {
         const fetchCatalogs = async () => {
             let res = await getCatalogs();
             setCategories(res?.sections)
-            setCategoryId({id: res?.sections[0]?.id, name: res?.sections[0]?.name});
+            setCategoryId({id: res?.sections[0]?.id, name:  i18n.language === 'ru' ? categories[0].name : vars[0]});
         }
         fetchCatalogs()
     }, [])
@@ -128,11 +129,12 @@ const MainMenu = () => {
                 scrollbarWidth: 'none',
             }} className="tabbar mt-4 w-full overflow-x-scroll">
                 <div className="flex justify-center items-center p-1 w-max  font-bold">
+
                     {categories.map((tab, index) => {
                             return (
                                 <button
                                     key={tab.id}
-                                    onClick={() => {setActiveTab(index); setCategoryId({id: tab.id, name: tab.name});}}
+                                    onClick={() => {setActiveTab(index); setCategoryId({id: tab.id, name: i18n.language === 'ru' ? tab.name : vars[index]});}}
                                     className={`
                           
               px-2 py-1.5   mx-1 rounded-md text-[13px] whitespace-nowrap transition-all
@@ -141,10 +143,10 @@ const MainMenu = () => {
                                         : ' text-[#1A8C03] bg-[#E0E0E6]'}
             `}
                                 >
-                                    {tab.name}
+                                    {i18n.language === 'ru' ? tab.name : vars[index]}
                                     <div className='w-4'></div>
                                 </button>
-                            )})}
+                            )}) }
 
                 </div>
             </div>
@@ -156,11 +158,10 @@ const MainMenu = () => {
                 {(products?.length === 0 || isProductLoading)  ? <Preloader color='#1A8C03'/> : (filteredProducts.length === 0 ? <div>{t('nothing_found')}</div> : filteredProducts?.map((product, index) => {
                     let isLastItem = (index === products?.length - 1)
                     return (
-                    <div>
+                    <div key={index}>
 
                         <div
                             /*ref={isLastCar ? lastCarRef : null}*/
-                            key={index}
                             onClick={() => {f7.views.main.router.navigate(`/card_content`, {props: {product: product, category: categoryId.name}})}}
                             className=" relative bg-color-white rounded-xl flex-grow w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-0 m-0"
                         >
@@ -212,4 +213,4 @@ const MainMenu = () => {
     );
 };
 
-export default MainMenu ;
+export default MainMenu;

@@ -171,7 +171,9 @@ const CardContent = (props) => {
                             {curProduct?.images.length > 0 ? curProduct?.images?.map(image => {
 
                                 return (
-                                <swiper-slide>
+                                <swiper-slide
+                                >
+
                                     <div className="cards-ctn" style={{
                                         display: 'flex',
                                         height:400,

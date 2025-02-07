@@ -119,6 +119,14 @@ i18next.use(initReactI18next)
                     make_order: 'Buyurtma berish',
                     order_placed: 'Buyurtma berildi!',
                     order_placed_p: 'Buyurtmangiz qabul qilindi! \n Tez orada siz bilan bog‘lanamiz.',
+                    variations: [
+                        'Eyakulyat diagnostikasi',
+                        'EKO laboratoriyasi uchun muhitlar',
+                        'Eyakulyatni tayyorlash',
+                        'Kriokonservatsiya va vitrifikatsiya',
+                        'Kateterlar',
+                        'EKO laboratoriyasi uchun dezinfeksiya vositalari',
+                    ]
                 }
             },
         }
