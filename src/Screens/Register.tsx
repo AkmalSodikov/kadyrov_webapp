@@ -75,6 +75,12 @@ const Register = () => {
             window.Telegram.WebApp.MainButton.hideProgress()
         }
     }
+    const handleBackBtn = () => {
+        window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
+        f7.views.main.router.navigate('/start', {
+            reloadAll: true,
+        });
+    }
 
     const handleChange = useCallback(
         (e) => {
@@ -96,6 +102,7 @@ const Register = () => {
 
     const handleLegalButton = () => {
         localStorage.setItem('register', JSON.stringify(state));
+        window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
         f7.views.main.router.navigate("/legal_register", {
             reloadAll: true,
         })
@@ -105,15 +112,17 @@ const Register = () => {
     useEffect(() => {
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
+        window.Telegram.WebApp.BackButton.isVisible = true;
         window.Telegram.WebApp.MainButton.text = t('continueBtn');
-        window.Telegram.WebApp.BackButton.hide();
     }, []);
 
 
     useEffect(() => {
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
+        window.Telegram.WebApp.onEvent('backButtonClicked', handleBackBtn);
 
         return (() => {
+            window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
             window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn)
         })
     }, [handleMainBtn])
@@ -130,8 +139,9 @@ const Register = () => {
 
     return (
         <Page onPageBeforeRemove={() => {
+                window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
                 window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn)
-            window.Telegram.WebApp.MainButton.isVisible = false;
+                window.Telegram.WebApp.MainButton.isVisible = false;
         }
         }>
             <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>{t('register')}</BlockHeader>

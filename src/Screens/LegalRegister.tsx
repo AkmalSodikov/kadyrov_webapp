@@ -127,12 +127,17 @@ const LegalRegister = () => {
         window.Telegram.WebApp.BackButton.show();
         window.Telegram.WebApp.onEvent('backButtonClicked', handleBackBtn);
 
+        return (() => {
+            window.Telegram.WebApp.offEvent("backButtonClicked", handleBackBtn)
+        })
+
     }, [])
 
 
 
     return (
         <Page onPageBeforeRemove={() => {
+            window.Telegram.WebApp.offEvent("backButtonClicked", handleBackBtn)
             window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn)
             window.Telegram.WebApp.MainButton.isVisible = false;
             window.Telegram.WebApp.BackButton.hide();

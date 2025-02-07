@@ -89,7 +89,7 @@ const Korzina = () => {
 
         const res = await makeOrder(order);
 
-        if (res.message) {
+        if (res.status === 'success') {
             f7.views.main.router.navigate('/order_placed', {
                 reloadAll: true,
             });
