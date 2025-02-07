@@ -38,7 +38,7 @@ const MainMenu = () => {
     const [img, setImg] = useState('');
     const [activeTab, setActiveTab] = useState(0);
     const [categories, setCategories] = useState([])
-    const [categoryId, setCategoryId] = useState({id: categories[0]?.id, name: i18n.language === 'ru' ? categories[0].name : vars[0]});
+    const [categoryId, setCategoryId] = useState({id: categories[0]?.id, name: i18n.language === 'ru' ? categories[0]?.name : vars[0]});
     const [products, setProducts] = useState([])
     const [isProductLoading, setIsProductLoading] = useState(false)
 
