@@ -16,6 +16,7 @@ import {
     Preloader,
     Searchbar
 } from "framework7-react";
+import gaga from '../../public/112.jpg'
 import home from '../assets/icons/home.svg'
 import heart_gray from '../assets/icons/heart_gray.svg'
 import korzina from '../assets/icons/korzina.svg'
@@ -172,7 +173,7 @@ const MainMenu = () => {
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'bottom center',
                                     height: 150,
-                                    backgroundImage: `url(${product?.images?.length > 0 ? product?.images[0]?.detailUrl.replace(/ /g, "%20") : image})`,
+                                    backgroundImage: `url(${product?.ID === '193' ? gaga : (product?.images?.length > 0 ? product?.images[0]?.detailUrl.replace(/ /g, "%20") : image)})`,
                                 }}
                                 className=" rounded-t-xl w-full"
                             >
