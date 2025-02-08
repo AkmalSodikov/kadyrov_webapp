@@ -14,7 +14,7 @@ i18next.use(initReactI18next)
                     //start:
                     description: 'Описание',
                     no_desc: 'Не указано',
-                    go_back: 'Вернуться',
+                    go_back: 'Назад в главное меню',
                     nothing_found: 'Ничего не найдено',
                     welcome: 'Добро пожаловать!',
                     welcome_p: 'Наш маркетплейс — ваш надежный помощник в мире медицинских товаров',
@@ -71,7 +71,7 @@ i18next.use(initReactI18next)
                     //start:
                     description: "Batafsil ma'lumot",
                     no_desc: 'Ma\'lumot yoq',
-                    go_back: 'Ortga qaytish',
+                    go_back: 'Asosiy menuga qaytish',
                     nothing_found: 'Hechnarsa topilmadi',
                     welcome: 'Xush kelibsiz!',
                     welcome_p: 'Bizning marketplace — tibbiy mahsulotlar dunyosidagi ishonchli yordamchingiz',

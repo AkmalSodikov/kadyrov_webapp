@@ -91,7 +91,7 @@ const CardContent = (props) => {
                         //limit: 1,
                         name: curProduct.name,
                         id: curProduct.id,
-                        quantity: 1,
+                        quantity: steppers[curProduct.id],
                         image: curProduct?.images[0]?.detailUrl || null,
                         cost: curProduct.price,
                         dose: curProduct.size,
@@ -110,18 +110,30 @@ const CardContent = (props) => {
             const res = await getProductById(product.ID);
             setCurProduct(res)
 
-            const initialSteppers = res?.variations?.reduce((acc, variation) => {
-                acc[variation.id] = 0; // Set initial value as 0 for each variation ID
-                return acc;
-            }, {});
+
+            if (res?.variations.length > 0) {
+                const initialSteppers = res?.variations?.reduce((acc, variation) => {
+                    acc[variation.id] = 0; // Set initial value as 0 for each variation ID
+                    return acc;
+                }, {});
 
 
-            setSteppers(initialSteppers);
+                setSteppers(initialSteppers);
+            } else {
+                setSteppers({[res?.id]: 0})
+            }
 
         }
 
         fetchProductById();
     }, [])
+
+    useEffect(() => {
+        console.log(steppers)
+    }, [steppers]);
+
+
+
 
     useEffect(() => {
         window.Telegram.WebApp.BackButton.show()
@@ -138,12 +150,9 @@ const CardContent = (props) => {
 
 
     useEffect(() => {
-        if (curProduct?.variations.length > 0) {
-            const hasActiveSteppers = Object.values(steppers).some((value) => value > 0);
-            setIsActive(hasActiveSteppers);
-        } else {
-            setIsActive(true);
-        }
+        const hasActiveSteppers = Object.values(steppers).some((value) => value > 0);
+        setIsActive(hasActiveSteppers);
+
     }, [steppers]);
 
 
@@ -219,7 +228,7 @@ const CardContent = (props) => {
                         }}>{i18n.language === 'uz' ? (curProduct?.description_uz?.value ||  t('no_desc') ) : (curProduct?.description_ru?.value || t('no_desc'))}</BlockFooter>
                     </div>
                 <div className='mt-4 mb-8'>
-                    {curProduct?.variations && curProduct.variations.map((item) => {
+                    {curProduct?.variations.length > 0 ? curProduct.variations.map((item) => {
                         if (item.price) {
                             return (
                                 <MyStepper
@@ -232,7 +241,14 @@ const CardContent = (props) => {
                                 />
                             )
                         }
-                    } )}
+                    } ) : <MyStepper
+                        key={curProduct?.id}
+                        stepperValue={steppers[curProduct?.id]}
+                        onDecrement={() => decrement(curProduct?.id)}
+                        onIncrement={() => increment(curProduct?.id, curProduct?.quantity)}
+                        cost={curProduct?.price}
+
+                    />}
                 </div>
 
 
