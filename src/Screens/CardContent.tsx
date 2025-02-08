@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { addItemToCart } from '../store/cartSlice.js';
 import {getProductById} from "../api/api";
 import {useTranslation} from "react-i18next";
+import gaga from '../../public/112.jpg'
 
 
 const CardContent = (props) => {
@@ -188,7 +189,7 @@ const CardContent = (props) => {
                                         height:400,
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',
-                                        backgroundImage: `url(${image?.detailUrl.replace(/ /g, "%20")})`,
+                                        backgroundImage: `url(${curProduct.id === '193' ? gaga : image?.detailUrl.replace(/ /g, "%20")})`,
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'bottom center',
                                     }}>
