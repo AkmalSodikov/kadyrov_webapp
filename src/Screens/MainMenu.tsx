@@ -173,7 +173,7 @@ const MainMenu = () => {
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'bottom center',
                                     height: 150,
-                                    backgroundImage: `url(${product?.ID === '193' ? gaga : (product?.images?.length > 0 ? product?.images[0]?.detailUrl.replace(/ /g, "%20") : image)})`,
+                                    backgroundImage: `url(${(product?.images?.length > 0 ? product?.images[0]?.detailUrl.replace(/ /g, "%20") : image)})`,
                                 }}
                                 className=" rounded-t-xl w-full"
                             >

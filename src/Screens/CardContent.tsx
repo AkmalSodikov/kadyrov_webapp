@@ -189,7 +189,7 @@ const CardContent = (props) => {
                                         height:400,
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',
-                                        backgroundImage: `url(${curProduct.id === '193' ? gaga : image?.detailUrl.replace(/ /g, "%20")})`,
+                                        backgroundImage: `url(${image?.detailUrl.replace(/ /g, "%20")})`,
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'bottom center',
                                     }}>
