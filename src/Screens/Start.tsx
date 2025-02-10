@@ -29,6 +29,10 @@ const Start = () => {
         f7.views.main.router.navigate('/register');
         window.Telegram.WebApp.MainButton.hideProgress()
     }
+
+    const handleBackBtn = () => {
+        f7.views.main.router.navigate('/change_lang');
+    }
     useEffect(() => {
         const initData = window.Telegram.WebApp.initDataUnsafe;
         localStorage.setItem('chatID', initData?.user?.id);
@@ -39,10 +43,15 @@ const Start = () => {
         window.Telegram.WebApp.MainButton.text = t('continueBtn');
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
+        window.Telegram.WebApp.BackButton.show()
+
+
+
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
-        window.Telegram.WebApp.BackButton.hide();
+        window.Telegram.WebApp.onEvent('backButtonClicked', handleBackBtn);
 
         return (() => {
+            window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
             window.Telegram.WebApp.offEvent('mainButtonClicked', handleMainBtn);
         })
     }, []);
@@ -131,9 +140,6 @@ const Start = () => {
                 </div>
             </div>
             </div>
-                <Button onClick={() => f7.views.main.router.navigate('/change_lang', {
-                    reloadAll: true,
-                })} large >{t('choose_lang')}</Button>
             </div>
 
 

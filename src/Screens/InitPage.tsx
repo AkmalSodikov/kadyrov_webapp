@@ -26,11 +26,11 @@ const InitPage = () => {
                         reloadAll: true,
                     })
                 } else if (data?.user?.status === 'rejected') {
-                    f7.views.main.router.navigate("/start", {
+                    f7.views.main.router.navigate("/change_lang", {
                         reloadAll: true,
                     })
                 } else {
-                    f7.views.main.router.navigate("/start", {
+                    f7.views.main.router.navigate("/change_lang", {
                         reloadAll: true,
                     })
                 }

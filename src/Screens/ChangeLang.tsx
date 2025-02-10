@@ -7,9 +7,8 @@ import {useTranslation} from "react-i18next";
 const ChangeLang = () => {
     const {i18n, t} = useTranslation();
     const [language, setLanguage] = useState(i18n.language)
-    const handleBackBtn = () => {
-        f7.views.main.router.navigate("/start")
-    }
+
+
     const handleMainBtn = () => {
         f7.views.main.router.navigate("/start")
     }
@@ -21,25 +20,21 @@ const ChangeLang = () => {
     useEffect(() => {
         window.Telegram.WebApp.MainButton.isVisible = true;
         window.Telegram.WebApp.MainButton.text = t('done');
-        window.Telegram.WebApp.onEvent('backButtonClicked', handleBackBtn);
+        window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
 
-        window.Telegram.WebApp.BackButton.show();
+        window.Telegram.WebApp.BackButton.hide();
 
         return (() => {
             window.Telegram.WebApp.offEvent('mainButtonClicked', handleMainBtn);
-            window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
         })
 
     }, [changeLang])
     return (
         <Page
-            onPageAfterOut={() => {
-                window.Telegram.WebApp.BackButton.hide();
-            }}
         >
             <div style={{display: 'flex', flexDirection: 'column', height: '100vw', justifyContent: 'center'}}>
-                <BlockHeader >{t('interfaceLang')}</BlockHeader>
+                <BlockHeader className='font-black' style={{fontSize: 20, lineHeight: 1.2, color: 'black'}}>Tilni tanlang / Выберите язык</BlockHeader>
                 <List strongIos dividersIos mediaList  inset>
                     <ListItem
                         checked={language === "uz"}

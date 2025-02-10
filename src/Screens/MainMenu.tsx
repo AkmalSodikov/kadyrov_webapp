@@ -59,7 +59,7 @@ const MainMenu = () => {
         const fetchCatalogs = async () => {
             let res = await getCatalogs();
             setCategories(res?.sections)
-            setCategoryId({id: res?.sections[0]?.id, name:  i18n.language === 'ru' ? categories[0].name : vars[0]});
+            setCategoryId({id: res?.sections[0]?.id, name:  i18n.language === 'ru' ? categories[0]?.name : vars[0]});
         }
         fetchCatalogs()
     }, [])
@@ -83,7 +83,7 @@ const MainMenu = () => {
 
 
     useEffect(() => {
-        const filteredProducts = products.filter((item) =>
+        const filteredProducts = products?.filter((item) =>
             item?.NAME.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredProducts(filteredProducts)

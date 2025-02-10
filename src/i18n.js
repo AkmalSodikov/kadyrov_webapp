@@ -27,7 +27,7 @@ i18next.use(initReactI18next)
                     choose_lang: 'ВЫБРАТЬ ЯЗЫК',
                     continueBtn: 'ПРОДОЛЖИТЬ',
                     // change lang:
-                    interfaceLang: 'Язык интерфейса',
+                    interfaceLang: 'Выберите язык',
                     done: 'Готово',
                     // register
                     register: 'Регистрация',
@@ -84,7 +84,7 @@ i18next.use(initReactI18next)
                     choose_lang: 'TILNI TANLANG',
                     continueBtn: 'DAVOM ETISH',
 // change lang:
-                    interfaceLang: 'Interfeys tili',
+                    interfaceLang: 'Tilni tanlang',
                     done: 'Bajarildi',
 // register
                     register: 'Ro‘yxatdan o‘tish',
