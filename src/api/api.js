@@ -2,7 +2,7 @@
 // @ts-nocheck
 import axios from "axios";
 
-const apiLink = 'https://api.kadyrovmedical.uz/api';
+const apiLink = 'https://api.kadyrovclinic.uz/';
 
 
 
