@@ -13,13 +13,12 @@ const ChangeLang = () => {
         f7.views.main.router.navigate("/start")
     }
     const changeLang = (selectedLanguage) => {
-
         setLanguage(selectedLanguage);
         i18n.changeLanguage(selectedLanguage);
     }
     useEffect(() => {
         window.Telegram.WebApp.MainButton.isVisible = true;
-        window.Telegram.WebApp.MainButton.text = t('done');
+        window.Telegram.WebApp.MainButton.text = t('continueBtn');
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
 
