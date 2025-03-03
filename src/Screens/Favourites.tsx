@@ -15,6 +15,8 @@ const Favourites = () => {
     const {i18n, t} = useTranslation();
     const favourites = useSelector((state) => state.favourites);
     console.log(favourites)
+
+
     return (
         <Page>
 
