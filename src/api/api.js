@@ -2,7 +2,7 @@
 // @ts-nocheck
 import axios from "axios";
 
-const apiLink = 'https://api.kadyrovclinic.uz';
+const apiLink = 'https://api.kadyrovapp.uz/api';
 
 
 
@@ -67,6 +67,17 @@ export const makeOrder = async (data) => {
         console.log(e)
     }
 }
+
+export const verifyExistingUser = async (phone) => {
+    try {
+        const res = await axios.post(`${apiLink}/verify-phone`, { phone });
+        console.log(res);
+        return res.data;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
 
 
 

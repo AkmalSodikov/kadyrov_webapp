@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import {useCallback, useEffect, useReducer, useState} from 'react';
-import {register} from "../api/api";
+import {register, verifyExistingUser} from "../api/api";
 import {BlockFooter, BlockHeader, BlockTitle, f7, f7ready, List, ListInput, ListItem, Page} from "framework7-react";
 import {useTranslation} from "react-i18next";
 
@@ -39,6 +39,8 @@ const Register = () => {
     }
 
     const [state, localDispatch] = useReducer<any, any>(formReducer, initialState);
+
+    const [showExistingUserModal, setShowExistingUserModal] = useState(false);
 
     const validateForm = () => {
         const errors = {}
@@ -109,6 +111,35 @@ const Register = () => {
 
     }
 
+    const handleExistingUser = async () => {
+        try {
+            if (validatePhone()) {
+                const result = await verifyExistingUser(state.phoneNumber);
+                if (result.success) {
+                    // Сохраняем токен
+                    localStorage.setItem('token', result.token);
+                    // Перенаправляем на главную страницу
+                    f7.views.main.router.navigate('/main_menu', {
+                        reloadAll: true,
+                    });
+                }
+            }
+        } catch (error) {
+            f7.dialog.alert(error.message || t('user_not_found'));
+        }
+    };
+
+    const validatePhone = () => {
+        if (Number.isNaN(Number(state.phoneNumber.slice(1))) || state.phoneNumber.length < 13) {
+            localDispatch({
+                type: 'setErrors',
+                payload: { ...state.errors, phoneNumber: t('enter_phone_number') }
+            });
+            return false;
+        }
+        return true;
+    };
+
     useEffect(() => {
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
@@ -145,62 +176,108 @@ const Register = () => {
         }
         }>
             <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>{t('register')}</BlockHeader>
-            <List strongIos dividersIos insetIos>
-                <ListInput
-                    maxlength={15}
-                    name="name"
-                    type="text"
-                    value={state.name}
-                    onChange={handleChange}
-                    errorMessageForce={state.errors.name}
-                    errorMessage={state.errors.name}
-                    placeholder={t('name')}
-                />
-                <ListInput
-                    maxlength={15}
-                    name="surname"
-                    type="text"
-                    value={state.surname}
-                    onChange={handleChange}
-                    errorMessageForce={state.errors.surname}
-                    errorMessage={state.errors.surname}
+            
+            {!showExistingUserModal ? (
+                <>
+                    <List strongIos dividersIos insetIos>
+                        <ListInput
+                            maxlength={15}
+                            name="name"
+                            type="text"
+                            value={state.name}
+                            onChange={handleChange}
+                            errorMessageForce={state.errors.name}
+                            errorMessage={state.errors.name}
+                            placeholder={t('name')}
+                        />
+                        <ListInput
+                            maxlength={15}
+                            name="surname"
+                            type="text"
+                            value={state.surname}
+                            onChange={handleChange}
+                            errorMessageForce={state.errors.surname}
+                            errorMessage={state.errors.surname}
+                            placeholder={t('surname')}
+                        />
+                        <ListInput
+                            maxlength={15}
+                            name="lastName"
+                            type="text"
+                            onChange={handleChange}
+                            errorMessageForce={state.errors.lastName}
+                            errorMessage={state.errors.lastName}
+                            placeholder={t('last_name')}
+                        />
+                    </List>
 
-                    placeholder={t('surname')}
-                />
-                <ListInput
-                    maxlength={15}
-                    name="lastName"
-                    type="text"
-                    onChange={handleChange}
-                    errorMessageForce={state.errors.lastName}
-                    errorMessage={state.errors.lastName}
-                    placeholder={t('last_name')}
-                />
-            </List>
+                    <BlockFooter>{t('enter_full_name')}</BlockFooter>
+                    <List strongIos dividersIos insetIos>
+                        <ListInput
+                            errorMessageForce={state.errors.phoneNumber}
+                            errorMessage={state.errors.phoneNumber}
+                            name="phoneNumber"
+                            type={"tel"}
+                            inputmode={"numeric"}
+                            placeholder="Номер телефона"
+                            maxlength={13}
+                            value={state.phoneNumber}
+                            onChange={handlePhoneNumberChange}
+                        />
+                    </List>
+                    <BlockFooter>{t('enter_phone_number')}</BlockFooter>
 
-            <BlockFooter>{t('enter_full_name')}</BlockFooter>
-            <List strongIos dividersIos insetIos>
-                <ListInput
-                    errorMessageForce={state.errors.phoneNumber}
-                    errorMessage={state.errors.phoneNumber}
-                    name="phoneNumber"
-                    type={"tel"}
-                    inputmode={"numeric"}
-                    placeholder="Номер телефона"
-                    maxlength={13}
-                    value={state.phoneNumber}
-                    onChange={handlePhoneNumberChange}
-                />
-            </List>
-            <BlockFooter>{t('enter_phone_number')}</BlockFooter>
+                    <div className='cursor-pointer' onClick={handleLegalButton}>
+                        <List strongIos dividersIos insetIos>
+                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}}>
+                                <label className='text-[#1A8C03]'>{t('legal_entity')}</label>
+                            </ListItem>
+                        </List>
+                    </div>
 
-            <div className='cursor-pointer' onClick={handleLegalButton}>
-                <List strongIos dividersIos insetIos>
-                    <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}}>
-                        <label className='text-[#1A8C03]'>{t('legal_entity')}</label>
-                    </ListItem>
-                </List>
-            </div>
+                    <div className='cursor-pointer mt-4' onClick={() => setShowExistingUserModal(true)}>
+                        <List strongIos dividersIos insetIos>
+                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}}>
+                                <label className='text-[#1A8C03]'>{t('existing_user')}</label>
+                            </ListItem>
+                        </List>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <BlockTitle>{t('enter_phone_for_verification')}</BlockTitle>
+                    <List strongIos dividersIos insetIos>
+                        <ListInput
+                            errorMessageForce={state.errors.phoneNumber}
+                            errorMessage={state.errors.phoneNumber}
+                            name="phoneNumber"
+                            type={"tel"}
+                            inputmode={"numeric"}
+                            placeholder="Номер телефона"
+                            maxlength={13}
+                            value={state.phoneNumber}
+                            onChange={handlePhoneNumberChange}
+                        />
+                    </List>
+                    <BlockFooter>{t('enter_phone_number')}</BlockFooter>
+
+                    <div className='cursor-pointer mt-4'>
+                        <List strongIos dividersIos insetIos>
+                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}} onClick={handleExistingUser}>
+                                <label className='text-[#1A8C03]'>{t('verify')}</label>
+                            </ListItem>
+                        </List>
+                    </div>
+
+                    <div className='cursor-pointer mt-2'>
+                        <List strongIos dividersIos insetIos>
+                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}} onClick={() => setShowExistingUserModal(false)}>
+                                <label className='text-[#1A8C03]'>{t('back')}</label>
+                            </ListItem>
+                        </List>
+                    </div>
+                </>
+            )}
         </Page>
     );
 };
