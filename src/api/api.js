@@ -70,12 +70,18 @@ export const makeOrder = async (data) => {
 
 export const verifyExistingUser = async (phone) => {
     try {
-        const res = await axios.post(`${apiLink}/verify-phone`, { phone });
-        console.log(res);
+        const res = await axios.post(`${apiLink}/verify-phone`, { 
+            phone,
+            telegram_chat_id: localStorage.getItem('chatID')
+        });
+        console.log('Успешный ответ:', res);
         return res.data;
     } catch (e) {
-        console.log(e);
-        throw e;
+        console.log('Ошибка запроса:', e.response?.data || e.message);
+        if (e.response?.data?.errors) {
+            console.log('Ошибки валидации:', e.response.data.errors);
+        }
+        throw e.response?.data || e;
     }
 };
 
