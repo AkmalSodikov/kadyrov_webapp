@@ -54,59 +54,29 @@ const Register = () => {
     }
 
     const handleMainBtn = async () => {
-        if (showExistingUserModal) {
-            // Логика для существующего пользователя
-            try {
-                if (validatePhone()) {
-                    window.Telegram.WebApp.MainButton.showProgress();
-                    const result = await verifyExistingUser(state.phoneNumber);
-                    if (result.success) {
-                        localStorage.setItem('token', result.token);
-                        f7.views.main.router.navigate('/main_menu', {
-                            reloadAll: true,
-                        });
-                    }
-                    window.Telegram.WebApp.MainButton.hideProgress();
-                }
-            } catch (error) {
-                window.Telegram.WebApp.MainButton.hideProgress();
-                f7.dialog.alert(error.message || t('user_not_found'));
-            }
-        } else {
-            // Логика для новой регистрации
-            if (validateForm()) {
+        try {
+            if (validatePhone()) {
                 window.Telegram.WebApp.MainButton.showProgress();
-                window.Telegram.WebApp.offEvent('mainButtonClicked', handleMainBtn);
-                try {
-                    const res = await register({
-                        first_name: state.name,
-                        second_name: state.surname,
-                        last_name: state.lastName,
-                        phone: state.phoneNumber,
-                        telegram_chat_id: localStorage.getItem('chatID'),
-                        is_legal_entity: false,
-                    });
-                    console.log(res);
-                    f7.views.main.router.navigate('/wait_page', {
+                const result = await verifyExistingUser(state.phoneNumber);
+                if (result.success) {
+                    localStorage.setItem('token', result.token);
+                    f7.views.main.router.navigate('/main_menu', {
                         reloadAll: true,
                     });
-                } catch (error) {
-                    f7.dialog.alert(error.message || t('registration_error'));
                 }
                 window.Telegram.WebApp.MainButton.hideProgress();
             }
+        } catch (error) {
+            window.Telegram.WebApp.MainButton.hideProgress();
+            f7.dialog.alert(error.message || t('user_not_found'));
         }
     }
 
     const handleBackBtn = () => {
-        if (showExistingUserModal) {
-            setShowExistingUserModal(false);
-        } else {
-            window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
-            f7.views.main.router.navigate('/start', {
-                reloadAll: true,
-            });
-        }
+        window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
+        f7.views.main.router.navigate('/start', {
+            reloadAll: true,
+        });
     }
 
     const handleChange = useCallback(
@@ -151,9 +121,8 @@ const Register = () => {
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
         window.Telegram.WebApp.BackButton.isVisible = true;
-        window.Telegram.WebApp.MainButton.text = showExistingUserModal ? t('verify') : t('continueBtn');
+        window.Telegram.WebApp.MainButton.text = t('continueBtn');
     }, [showExistingUserModal]);
-
 
     useEffect(() => {
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
@@ -165,112 +134,31 @@ const Register = () => {
         })
     }, [handleMainBtn])
 
-
-
-
-
-
-
-
-
-
-
     return (
         <Page onPageBeforeRemove={() => {
-                window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
-                window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn)
-                window.Telegram.WebApp.MainButton.isVisible = false;
-        }
-        }>
+            window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
+            window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn)
+            window.Telegram.WebApp.MainButton.isVisible = false;
+        }}>
             <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>
-                {showExistingUserModal ? t('login') : t('register')}
+                {t('login')}
             </BlockHeader>
             
-            {!showExistingUserModal ? (
-                <>
-                    <List strongIos dividersIos insetIos>
-                        <ListInput
-                            maxlength={15}
-                            name="name"
-                            type="text"
-                            value={state.name}
-                            onChange={handleChange}
-                            errorMessageForce={state.errors.name}
-                            errorMessage={state.errors.name}
-                            placeholder={t('name')}
-                        />
-                        <ListInput
-                            maxlength={15}
-                            name="surname"
-                            type="text"
-                            value={state.surname}
-                            onChange={handleChange}
-                            errorMessageForce={state.errors.surname}
-                            errorMessage={state.errors.surname}
-                            placeholder={t('surname')}
-                        />
-                        <ListInput
-                            maxlength={15}
-                            name="lastName"
-                            type="text"
-                            onChange={handleChange}
-                            errorMessageForce={state.errors.lastName}
-                            errorMessage={state.errors.lastName}
-                            placeholder={t('last_name')}
-                        />
-                    </List>
-
-                    <BlockFooter>{t('enter_full_name')}</BlockFooter>
-                    <List strongIos dividersIos insetIos>
-                        <ListInput
-                            errorMessageForce={state.errors.phoneNumber}
-                            errorMessage={state.errors.phoneNumber}
-                            name="phoneNumber"
-                            type={"tel"}
-                            inputmode={"numeric"}
-                            placeholder="Номер телефона"
-                            maxlength={13}
-                            value={state.phoneNumber}
-                            onChange={handlePhoneNumberChange}
-                        />
-                    </List>
-                    <BlockFooter>{t('enter_phone_number')}</BlockFooter>
-
-                    <div className='cursor-pointer' onClick={handleLegalButton}>
-                        <List strongIos dividersIos insetIos>
-                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}}>
-                                <label className='text-[#1A8C03]'>{t('legal_entity')}</label>
-                            </ListItem>
-                        </List>
-                    </div>
-
-                    <div className='cursor-pointer mt-4' onClick={() => setShowExistingUserModal(true)}>
-                        <List strongIos dividersIos insetIos>
-                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}}>
-                                <label className='text-[#1A8C03]'>{t('existing_user')}</label>
-                            </ListItem>
-                        </List>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <BlockTitle>{t('enter_phone_for_verification')}</BlockTitle>
-                    <List strongIos dividersIos insetIos>
-                        <ListInput
-                            errorMessageForce={state.errors.phoneNumber}
-                            errorMessage={state.errors.phoneNumber}
-                            name="phoneNumber"
-                            type={"tel"}
-                            inputmode={"numeric"}
-                            placeholder="Номер телефона"
-                            maxlength={13}
-                            value={state.phoneNumber}
-                            onChange={handlePhoneNumberChange}
-                        />
-                    </List>
-                    <BlockFooter>{t('enter_phone_number')}</BlockFooter>
-                </>
-            )}
+            <BlockTitle>{t('enter_phone_for_verification')}</BlockTitle>
+            <List strongIos dividersIos insetIos>
+                <ListInput
+                    errorMessageForce={state.errors.phoneNumber}
+                    errorMessage={state.errors.phoneNumber}
+                    name="phoneNumber"
+                    type={"tel"}
+                    inputmode={"numeric"}
+                    placeholder="Номер телефона"
+                    maxlength={13}
+                    value={state.phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                />
+            </List>
+            <BlockFooter>{t('enter_phone_number')}</BlockFooter>
         </Page>
     );
 };
