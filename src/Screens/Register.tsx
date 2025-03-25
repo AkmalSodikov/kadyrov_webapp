@@ -53,35 +53,60 @@ const Register = () => {
         return Object.keys(errors).length === 0;
     }
 
-    const handleMainBtn = () => {
-
-        if (validateForm()) {
-            window.Telegram.WebApp.MainButton.showProgress((leave = true) => {})
-            window.Telegram.WebApp.offEvent('mainButtonClicked', handleMainBtn);
-            const registerUser = async () => {
-                const res = await register({
-                    first_name: state.name,
-                    second_name: state.surname,
-                    last_name: state.lastName,
-                    phone: state.phoneNumber,
-                    telegram_chat_id: localStorage.getItem('chatID'),
-                    is_legal_entity: false,
-                })
-                console.log(res)
+    const handleMainBtn = async () => {
+        if (showExistingUserModal) {
+            // Логика для существующего пользователя
+            try {
+                if (validatePhone()) {
+                    window.Telegram.WebApp.MainButton.showProgress();
+                    const result = await verifyExistingUser(state.phoneNumber);
+                    if (result.success) {
+                        localStorage.setItem('token', result.token);
+                        f7.views.main.router.navigate('/main_menu', {
+                            reloadAll: true,
+                        });
+                    }
+                    window.Telegram.WebApp.MainButton.hideProgress();
+                }
+            } catch (error) {
+                window.Telegram.WebApp.MainButton.hideProgress();
+                f7.dialog.alert(error.message || t('user_not_found'));
             }
-            registerUser();
-
-            f7.views.main.router.navigate('/wait_page', {
-                reloadAll: true,
-            });
-            window.Telegram.WebApp.MainButton.hideProgress()
+        } else {
+            // Логика для новой регистрации
+            if (validateForm()) {
+                window.Telegram.WebApp.MainButton.showProgress();
+                window.Telegram.WebApp.offEvent('mainButtonClicked', handleMainBtn);
+                try {
+                    const res = await register({
+                        first_name: state.name,
+                        second_name: state.surname,
+                        last_name: state.lastName,
+                        phone: state.phoneNumber,
+                        telegram_chat_id: localStorage.getItem('chatID'),
+                        is_legal_entity: false,
+                    });
+                    console.log(res);
+                    f7.views.main.router.navigate('/wait_page', {
+                        reloadAll: true,
+                    });
+                } catch (error) {
+                    f7.dialog.alert(error.message || t('registration_error'));
+                }
+                window.Telegram.WebApp.MainButton.hideProgress();
+            }
         }
     }
+
     const handleBackBtn = () => {
-        window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
-        f7.views.main.router.navigate('/start', {
-            reloadAll: true,
-        });
+        if (showExistingUserModal) {
+            setShowExistingUserModal(false);
+        } else {
+            window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
+            f7.views.main.router.navigate('/start', {
+                reloadAll: true,
+            });
+        }
     }
 
     const handleChange = useCallback(
@@ -111,24 +136,6 @@ const Register = () => {
 
     }
 
-    const handleExistingUser = async () => {
-        try {
-            if (validatePhone()) {
-                const result = await verifyExistingUser(state.phoneNumber);
-                if (result.success) {
-                    // Сохраняем токен
-                    localStorage.setItem('token', result.token);
-                    // Перенаправляем на главную страницу
-                    f7.views.main.router.navigate('/main_menu', {
-                        reloadAll: true,
-                    });
-                }
-            }
-        } catch (error) {
-            f7.dialog.alert(error.message || t('user_not_found'));
-        }
-    };
-
     const validatePhone = () => {
         if (Number.isNaN(Number(state.phoneNumber.slice(1))) || state.phoneNumber.length < 13) {
             localDispatch({
@@ -144,8 +151,8 @@ const Register = () => {
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
         window.Telegram.WebApp.BackButton.isVisible = true;
-        window.Telegram.WebApp.MainButton.text = t('continueBtn');
-    }, []);
+        window.Telegram.WebApp.MainButton.text = showExistingUserModal ? t('verify') : t('continueBtn');
+    }, [showExistingUserModal]);
 
 
     useEffect(() => {
@@ -175,7 +182,9 @@ const Register = () => {
                 window.Telegram.WebApp.MainButton.isVisible = false;
         }
         }>
-            <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>{t('register')}</BlockHeader>
+            <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>
+                {showExistingUserModal ? t('login') : t('register')}
+            </BlockHeader>
             
             {!showExistingUserModal ? (
                 <>
@@ -260,22 +269,6 @@ const Register = () => {
                         />
                     </List>
                     <BlockFooter>{t('enter_phone_number')}</BlockFooter>
-
-                    <div className='cursor-pointer mt-4'>
-                        <List strongIos dividersIos insetIos>
-                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}} onClick={handleExistingUser}>
-                                <label className='text-[#1A8C03]'>{t('verify')}</label>
-                            </ListItem>
-                        </List>
-                    </div>
-
-                    <div className='cursor-pointer mt-2'>
-                        <List strongIos dividersIos insetIos>
-                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}} onClick={() => setShowExistingUserModal(false)}>
-                                <label className='text-[#1A8C03]'>{t('back')}</label>
-                            </ListItem>
-                        </List>
-                    </div>
                 </>
             )}
         </Page>

@@ -74,8 +74,18 @@ export const verifyExistingUser = async (phone) => {
             phone,
             telegram_chat_id: localStorage.getItem('chatID')
         });
-        console.log('Успешный ответ:', res);
-        return res.data;
+        console.log('Ответ сервера:', res.data);
+        
+        if (res.data.status === 'approved') {
+            return {
+                status: res.data.status,
+                user: res.data.user,
+                token: res.data.token,
+                message: res.data.message
+            };
+        }
+        
+        throw new Error(res.data.message || 'Неизвестная ошибка');
     } catch (e) {
         console.log('Ошибка запроса:', e.response?.data || e.message);
         if (e.response?.data?.errors) {
