@@ -120,16 +120,13 @@ const Register = () => {
     useEffect(() => {
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
-        window.Telegram.WebApp.BackButton.isVisible = true;
+        window.Telegram.WebApp.BackButton.isVisible = false;
         window.Telegram.WebApp.MainButton.text = t('continueBtn');
     }, [showExistingUserModal]);
 
     useEffect(() => {
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
-        window.Telegram.WebApp.onEvent('backButtonClicked', handleBackBtn);
-
         return (() => {
-            window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
             window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn)
         })
     }, [handleMainBtn])
@@ -141,24 +138,94 @@ const Register = () => {
             window.Telegram.WebApp.MainButton.isVisible = false;
         }}>
             <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>
-                {t('login')}
+                {showExistingUserModal ? t('login') : t('register')}
             </BlockHeader>
             
-            <BlockTitle>{t('enter_phone_for_verification')}</BlockTitle>
-            <List strongIos dividersIos insetIos>
-                <ListInput
-                    errorMessageForce={state.errors.phoneNumber}
-                    errorMessage={state.errors.phoneNumber}
-                    name="phoneNumber"
-                    type={"tel"}
-                    inputmode={"numeric"}
-                    placeholder="Номер телефона"
-                    maxlength={13}
-                    value={state.phoneNumber}
-                    onChange={handlePhoneNumberChange}
-                />
-            </List>
-            <BlockFooter>{t('enter_phone_number')}</BlockFooter>
+            {!showExistingUserModal ? (
+                <>
+                    <List strongIos dividersIos insetIos>
+                        <ListInput
+                            maxlength={15}
+                            name="name"
+                            type="text"
+                            value={state.name}
+                            onChange={handleChange}
+                            errorMessageForce={state.errors.name}
+                            errorMessage={state.errors.name}
+                            placeholder={t('name')}
+                        />
+                        <ListInput
+                            maxlength={15}
+                            name="surname"
+                            type="text"
+                            value={state.surname}
+                            onChange={handleChange}
+                            errorMessageForce={state.errors.surname}
+                            errorMessage={state.errors.surname}
+                            placeholder={t('surname')}
+                        />
+                        <ListInput
+                            maxlength={15}
+                            name="lastName"
+                            type="text"
+                            onChange={handleChange}
+                            errorMessageForce={state.errors.lastName}
+                            errorMessage={state.errors.lastName}
+                            placeholder={t('last_name')}
+                        />
+                    </List>
+
+                    <BlockFooter>{t('enter_full_name')}</BlockFooter>
+                    <List strongIos dividersIos insetIos>
+                        <ListInput
+                            errorMessageForce={state.errors.phoneNumber}
+                            errorMessage={state.errors.phoneNumber}
+                            name="phoneNumber"
+                            type={"tel"}
+                            inputmode={"numeric"}
+                            placeholder="Номер телефона"
+                            maxlength={13}
+                            value={state.phoneNumber}
+                            onChange={handlePhoneNumberChange}
+                        />
+                    </List>
+                    <BlockFooter>{t('enter_phone_number')}</BlockFooter>
+
+                    <div className='cursor-pointer' onClick={handleLegalButton}>
+                        <List strongIos dividersIos insetIos>
+                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}}>
+                                <label className='text-[#1A8C03]'>{t('legal_entity')}</label>
+                            </ListItem>
+                        </List>
+                    </div>
+
+                    <div className='cursor-pointer mt-4' onClick={() => setShowExistingUserModal(true)}>
+                        <List strongIos dividersIos insetIos>
+                            <ListItem className='delete-button' style={{display: 'flex', justifyContent: 'center', width: "100%"}}>
+                                <label className='text-[#1A8C03]'>{t('existing_user')}</label>
+                            </ListItem>
+                        </List>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <BlockTitle>{t('enter_phone_for_verification')}</BlockTitle>
+                    <List strongIos dividersIos insetIos>
+                        <ListInput
+                            errorMessageForce={state.errors.phoneNumber}
+                            errorMessage={state.errors.phoneNumber}
+                            name="phoneNumber"
+                            type={"tel"}
+                            inputmode={"numeric"}
+                            placeholder="Номер телефона"
+                            maxlength={13}
+                            value={state.phoneNumber}
+                            onChange={handlePhoneNumberChange}
+                        />
+                    </List>
+                    <BlockFooter>{t('enter_phone_number')}</BlockFooter>
+                </>
+            )}
         </Page>
     );
 };
