@@ -54,41 +54,63 @@ const Register = () => {
     }
 
     const handleMainBtn = async () => {
-        try {
-            if (validatePhone()) {
-                window.Telegram.WebApp.MainButton.showProgress();
-                const result = await verifyExistingUser(state.phoneNumber);
-                console.log('Результат верификации:', result);
-
-                if (result && result.status === 'approved' && result.token) {
-                    localStorage.setItem('token', result.token);
-                    localStorage.setItem('user', JSON.stringify(result.user));
-                    window.Telegram.WebApp.MainButton.hideProgress();
-
-                    // Добавляем небольшую задержку перед переходом
-                    setTimeout(() => {
-                        f7.views.main.router.navigate('/main_menu', {
-                            reloadAll: true,
-                            clearPreviousHistory: true
-                        });
-                    }, 100);
-                } else {
-                    window.Telegram.WebApp.MainButton.hideProgress();
-                    f7.dialog.alert(result?.message || t('user_not_found'));
+        if (showExistingUserModal) {
+            // Логика для существующего пользователя
+            try {
+                if (validatePhone()) {
+                    window.Telegram.WebApp.MainButton.showProgress();
+                    const result = await verifyExistingUser(state.phoneNumber);
+                    console.log('Результат верификации:', result);
+                    
+                    if (result && result.status === 'approved' && result.token) {
+                        localStorage.setItem('token', result.token);
+                        localStorage.setItem('user', JSON.stringify(result.user));
+                        window.Telegram.WebApp.MainButton.hideProgress();
+                        
+                        setTimeout(() => {
+                            f7.views.main.router.navigate('/main_menu', {
+                                reloadAll: true,
+                                clearPreviousHistory: true
+                            });
+                        }, 100);
+                    } else {
+                        window.Telegram.WebApp.MainButton.hideProgress();
+                        f7.dialog.alert(result?.message || t('user_not_found'));
+                    }
                 }
+            } catch (error) {
+                console.error('Ошибка при верификации:', error);
+                window.Telegram.WebApp.MainButton.hideProgress();
+                f7.dialog.alert(error?.message || t('user_not_found'));
             }
-        } catch (error) {
-            console.error('Ошибка при верификации:', error);
-            window.Telegram.WebApp.MainButton.hideProgress();
-            f7.dialog.alert(error?.message || t('user_not_found'));
+        } else {
+            // Логика для новой регистрации
+            if (validateForm()) {
+                window.Telegram.WebApp.MainButton.showProgress();
+                window.Telegram.WebApp.offEvent('mainButtonClicked', handleMainBtn);
+                try {
+                    const res = await register({
+                        first_name: state.name,
+                        second_name: state.surname,
+                        last_name: state.lastName,
+                        phone: state.phoneNumber,
+                        telegram_chat_id: localStorage.getItem('chatID'),
+                        is_legal_entity: false,
+                    });
+                    console.log(res);
+                    f7.views.main.router.navigate('/wait_page', {
+                        reloadAll: true,
+                    });
+                } catch (error) {
+                    f7.dialog.alert(error.message || t('registration_error'));
+                }
+                window.Telegram.WebApp.MainButton.hideProgress();
+            }
         }
     }
 
     const handleBackBtn = () => {
-        window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
-        f7.views.main.router.navigate('/start', {
-            reloadAll: true,
-        });
+        setShowExistingUserModal(false);
     }
 
     const handleChange = useCallback(
@@ -132,16 +154,22 @@ const Register = () => {
     useEffect(() => {
         window.Telegram.WebApp.MainButton.color = "#1A8C03";
         window.Telegram.WebApp.MainButton.isVisible = true;
-        window.Telegram.WebApp.BackButton.isVisible = false;
-        window.Telegram.WebApp.MainButton.text = t('continueBtn');
+        window.Telegram.WebApp.BackButton.isVisible = showExistingUserModal;
+        window.Telegram.WebApp.MainButton.text = showExistingUserModal ? t('verify') : t('continueBtn');
     }, [showExistingUserModal]);
 
     useEffect(() => {
         window.Telegram.WebApp.onEvent('mainButtonClicked', handleMainBtn);
+        if (showExistingUserModal) {
+            window.Telegram.WebApp.onEvent('backButtonClicked', handleBackBtn);
+        }
         return (() => {
-            window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn)
+            window.Telegram.WebApp.offEvent("mainButtonClicked", handleMainBtn);
+            if (showExistingUserModal) {
+                window.Telegram.WebApp.offEvent('backButtonClicked', handleBackBtn);
+            }
         })
-    }, [handleMainBtn])
+    }, [handleMainBtn, showExistingUserModal]);
 
     return (
         <Page onPageBeforeRemove={() => {
