@@ -58,17 +58,29 @@ const Register = () => {
             if (validatePhone()) {
                 window.Telegram.WebApp.MainButton.showProgress();
                 const result = await verifyExistingUser(state.phoneNumber);
-                if (result.success) {
+                console.log('Результат верификации:', result);
+
+                if (result && result.status === 'approved' && result.token) {
                     localStorage.setItem('token', result.token);
-                    f7.views.main.router.navigate('/main_menu', {
-                        reloadAll: true,
-                    });
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    window.Telegram.WebApp.MainButton.hideProgress();
+
+                    // Добавляем небольшую задержку перед переходом
+                    setTimeout(() => {
+                        f7.views.main.router.navigate('/main_menu', {
+                            reloadAll: true,
+                            clearPreviousHistory: true
+                        });
+                    }, 100);
+                } else {
+                    window.Telegram.WebApp.MainButton.hideProgress();
+                    f7.dialog.alert(result?.message || t('user_not_found'));
                 }
-                window.Telegram.WebApp.MainButton.hideProgress();
             }
         } catch (error) {
+            console.error('Ошибка при верификации:', error);
             window.Telegram.WebApp.MainButton.hideProgress();
-            f7.dialog.alert(error.message || t('user_not_found'));
+            f7.dialog.alert(error?.message || t('user_not_found'));
         }
     }
 
@@ -138,9 +150,9 @@ const Register = () => {
             window.Telegram.WebApp.MainButton.isVisible = false;
         }}>
             <BlockHeader className='font-black' style={{fontSize: 25, lineHeight: 1.2, color: 'black'}}>
-                {showExistingUserModal ? t('login') : t('register')}
+                {showExistingUserModal ? t('Login') : t('register')}
             </BlockHeader>
-            
+
             {!showExistingUserModal ? (
                 <>
                     <List strongIos dividersIos insetIos>
