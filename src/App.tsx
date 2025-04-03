@@ -2,7 +2,7 @@
 // @ts-nocheck
 import React, { useState, Suspense } from 'react'
 import './App.css'
-import { App, View } from "framework7-react/esm/components";
+import { App, View } from "framework7-react";
 
 // Динамические импорты для всех компонентов
 const Start = React.lazy(() => import("./Screens/Start"));

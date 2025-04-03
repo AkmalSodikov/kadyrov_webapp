@@ -8,15 +8,24 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'framework7': ['framework7-react'],
+          'framework7': ['framework7-react', 'framework7'],
           'vendor': ['react', 'react-dom'],
           'i18n': ['i18next', 'react-i18next']
         }
       }
     },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 1000,
+    commonjsOptions: {
+      include: [/framework7-react/, /node_modules/]
+    }
   },
   optimizeDeps: {
-    include: ['framework7-react']
+    include: ['framework7-react', 'framework7']
+  },
+  resolve: {
+    alias: {
+      'framework7/framework7-bundle.min.css': 'framework7/framework7-bundle.css',
+      'framework7-icons/css/framework7-icons.css': 'framework7-icons/css/framework7-icons.css'
+    }
   }
 })
